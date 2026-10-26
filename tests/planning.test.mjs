@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import { preparePlanningInput, calculatePlan } from '../dist/planning.js';
+import { documentFields } from '../dist/redaction.js';
+const ids=documentFields.filter(f=>f.sensitive).map(f=>f.id);
+const attachments=['summary','quote','requirements'];
+assert.equal(preparePlanningInput({marked:ids,applied:[]},attachments).ok,false);
+assert.equal(preparePlanningInput({marked:[],applied:[]},attachments).ok,false);
+const safe={marked:ids,applied:ids};
+assert.equal(preparePlanningInput(safe,['summary']).ok,false);
+const prepared=preparePlanningInput(safe,attachments);
+assert.equal(prepared.ok,true);
+for(const field of documentFields.filter(f=>f.sensitive))assert.equal(JSON.stringify(prepared.input).includes(field.value),false);
+const result=calculatePlan(prepared.input);
+assert.equal(result.catering,3840);
+assert.equal(result.total,15840);
+assert.equal(result.reserve,4160);
+assert.equal(calculatePlan({...prepared.input,costs:{...prepared.input.costs,budget:10000}}).overBudget,true);
+console.log('Planning privacy and calculation checks passed');
