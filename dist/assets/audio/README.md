@@ -1,1 +1,1 @@
-Recordings omitted pending explicit public-release approval. The existing private draft retains the recordings.
+Eight fictional workshop recordings published with the owner's explicit approval. File 01 is audio extracted from the supplied MP4; files 02–08 preserve the supplied MP3s. Numbering matches dist/messages.js.
