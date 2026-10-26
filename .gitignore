@@ -1,4 +1,6 @@
-.openai/
 node_modules/
-.env*
+.wrangler/
+.openai/
 .dev.vars*
+.env*
+!.env.example
