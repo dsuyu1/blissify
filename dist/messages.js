@@ -1,0 +1,1 @@
+export const messages = Object.fromEntries(Array.from({length:8},(_,i)=>[i+1,{sender:'Workshop recording '+(i+1),subject:'Media pending public-release approval',file:'pending.mp3',text:'Recording and message text have not been included in this public export.'}]));
