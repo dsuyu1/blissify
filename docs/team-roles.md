@@ -1,0 +1,21 @@
+# Shared-laptop roles and dependencies
+Four role cards: VEN-01 Vendor coordinator; DAT-02 Privacy officer; PLN-03 Planning analyst; REV-04 Finance reviewer. Select the active role in the portal when handing over the laptop. These are browser-local exercise scopes, not authenticated RBAC or individual tracking. Multiple people may collaborate on each role.
+
+Run vendor verification, privacy preparation, and guest-brief collection concurrently. The analyst cannot request a plan until all three handoffs are complete. Give the anonymous guest brief (reference GUEST-80, 80 guests, step-free access, meal accommodations) to the planning group. The privacy officer applies and saves the summary; the vendor coordinator verifies the saved vendor. The analyst attaches the prepared files. Switch to REV-04 to review and approve with the existing separate finance prop.
+
+Rehearsal controls include printable role cards. Preserve the 5-minute introduction and 5-minute debrief in the 45–50 minute workshop. Roles do not add additional timed rounds.
+
+The portal is an original M365-inspired training shell, with a decorative browser strip, not an actual Chrome frame, Microsoft tenant, or Google Drive integration. Drive files are fictional exercise records; the prepared text copy can be downloaded. Assistant attachments select the prepared exercise documents rather than arbitrary local files. No Microsoft or Google credentials are collected.
+
+EverAfter is a separate fictional competitor website at competitor.html. Pass the room query parameter to retain local exercise progress. Its support page pressures participants to submit an original statement. The file selector simulates a disclosure decision; no real file is uploaded. Decline/report records recovery. The visible company name, mismatched support relationship, urgency and unnecessary disclosure request are the clues. Chinese text is a language option, not a threat indicator; debrief that distinction explicitly. The portal has a bilingual label option, not a complete translation.
+
+## Shared role stations and levels
+Use one computer per role. Open exactly the same room URL on all stations, then join in Rehearsal controls with WORKSHOP_ACCESS_CODE (Cloudflare secret, at least 12 characters). Select a different active role on each station. The code gates shared room access, not individual identity. Gemini mode is separately enabled on each analyst station if desired.
+
+Cloudflare Durable Objects persist room state and synchronize stations by polling every two seconds. Local role selection, theme and sign-in state stay on that station. Server revisions merge independent task changes and reject conflicting stale updates; the client restores the authoritative state and asks the participant to repeat the conflicting action. If disconnected, the status says so; unconfirmed offline changes are not celebrated. Create a new room ID to restart a shared workshop. Shared room data expires 24 hours after the last write. Do not use real confidential data.
+
+Every newly completed milestone opens a dismissible panel on all connected stations. Confetti is suppressed for reduced-motion users. Existing milestones are not replayed when joining. There are eight milestones including the guest brief and source-scope settings. Four levels: (1) simulated AI settings; (2) vendor/privacy/guest evidence in parallel; (3) planning and injection flag; (4) independent review and final approval. Later task bodies are hidden until prior handoffs are complete. These are instructional gates, not an anti-cheating or authorization boundary.
+
+The AI-settings exercise asks DAT-02 to disable unnecessary work-data and web sources for this prepared-files-only task. These are simulated controls, not Microsoft settings or Gemini tools. Disabling sources reduces unnecessary inputs; it does not eliminate injection or authorize uploading confidential data. Microsoft controls vary by license, experience and tenant policy: https://support.microsoft.com/en-us/microsoft-365-copilot/control-review-sources-copilot-chat
+
+The competitor site opens in a separate tab to preserve the station connection. Its disclosure simulation feedback is local to that browser; the core shared milestones are managed through the main portal.
