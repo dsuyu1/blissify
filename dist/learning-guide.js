@@ -1,11 +1,19 @@
+import {LESSON_VIEW_MS,advanceLesson,canAcknowledge,acknowledgeLesson} from './lesson-gate.js';
 import {tasks,roleName} from './workflow.js';
 import {guideTask,lessons} from './guide-content.js';
 export function createLearningGuide(onChoose){
  const root=document.createElement('aside');root.id='learning-guide';root.hidden=true;
- root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>BLISSIFY AI · TASK GUIDE</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><details id="guide-waiting" hidden><summary>View prerequisites</summary><ul></ul></details><h2>Why this matters</h2><p id="guide-why"></p><button type="button" id="guide-hint-toggle" aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></section><button type="button" id="guide-toggle" aria-label="Open Blissify AI task guide" aria-expanded="false" aria-controls="learning-guide-panel"><span class="guide-mascot-frame" aria-hidden="true"><img src="assets/blissify-ai-mascot.webp" alt="" width="88" height="96"></span></button>';
+ root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>BLISSIFY AI · TASK GUIDE</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><details id="guide-waiting" hidden><summary>View prerequisites</summary><ul></ul></details><h2>Why this matters</h2><p id="guide-why"></p><div id="guide-lesson-gate"><label for="guide-reading-progress">Read the AI security lesson before unlocking a hint</label><progress id="guide-reading-progress" max="15000" value="0"></progress><p id="guide-reading-status"></p><button type="button" id="guide-acknowledge" disabled>I’ve read the lesson · Unlock hint</button></div><button type="button" id="guide-hint-toggle" disabled aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></section><button type="button" id="guide-toggle" aria-label="Open Blissify AI task guide" aria-expanded="false" aria-controls="learning-guide-panel"><span class="guide-mascot-frame" aria-hidden="true"><img src="assets/blissify-ai-mascot.webp" alt="" width="88" height="96"></span></button>';
  document.body.append(root);
  const panel=root.querySelector('section'),toggle=root.querySelector('#guide-toggle'),hint=root.querySelector('#guide-hint'),hintToggle=root.querySelector('#guide-hint-toggle'),select=root.querySelector('select');
  let pinned=false,opened=false,current='',animation=null,ignoreFocus=false;const shownHints=new Set();
+ const gates=new Map();let gateKey='',lastTick=performance.now();
+ const gateBox=root.querySelector('#guide-lesson-gate'),progressBar=root.querySelector('#guide-reading-progress'),readingStatus=root.querySelector('#guide-reading-status'),ackButton=root.querySelector('#guide-acknowledge');
+ const progress=()=>gates.get(gateKey)||{elapsed:0,acknowledged:false};
+ function refreshGate(){const p=progress();progressBar.value=p.elapsed;gateBox.hidden=!!p.acknowledged;ackButton.disabled=!canAcknowledge(p);hintToggle.disabled=!p.acknowledged;hintToggle.setAttribute('aria-describedby',p.acknowledged?'guide-why':'guide-reading-status');readingStatus.textContent=canAcknowledge(p)?'Ready: acknowledge the lesson to unlock your hint.':Math.ceil((LESSON_VIEW_MS-p.elapsed)/1000)+' seconds of lesson viewing remaining.';if(!p.acknowledged){hint.hidden=true;hintToggle.setAttribute('aria-expanded','false')}}
+ ackButton.addEventListener('click',()=>{const p=acknowledgeLesson(progress());gates.set(gateKey,p);if(p.acknowledged){try{sessionStorage.setItem(gateKey,'1')}catch{}refreshGate();hintToggle.focus()}});
+ setInterval(()=>{const now=performance.now(),elapsed=now-lastTick;lastTick=now;if(!gateKey)return;const lesson=root.querySelector('#guide-why').getBoundingClientRect(),box=panel.getBoundingClientRect();const visible=opened&&!root.hidden&&!panel.hidden&&document.visibilityState==='visible'&&lesson.bottom>box.top&&lesson.top<box.bottom&&lesson.bottom>0&&lesson.top<innerHeight;gates.set(gateKey,advanceLesson(progress(),elapsed,visible));refreshGate()},250);
+ document.addEventListener('visibilitychange',()=>{lastTick=performance.now()});
  try{pinned=localStorage.getItem('blissify-guide-pinned')==='1'}catch{}
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const remember=()=>{try{localStorage.setItem('blissify-guide-pinned',pinned?'1':'0')}catch{}};
@@ -22,14 +30,15 @@ export function createLearningGuide(onChoose){
  root.addEventListener('focusout',()=>requestAnimationFrame(()=>{if(!pinned&&!root.contains(document.activeElement))setOpen(false)}));
  root.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();pinned=false;remember();setOpen(false);ignoreFocus=true;toggle.focus();ignoreFocus=false}});
  select.addEventListener('change',()=>onChoose(select.value));
- hintToggle.addEventListener('click',()=>{if(shownHints.has(current))shownHints.delete(current);else shownHints.add(current);hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'});
+ hintToggle.addEventListener('click',()=>{if(!progress().acknowledged)return;if(shownHints.has(current))shownHints.delete(current);else shownHints.add(current);hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'});
  return {update({page,state,preferred,portal,greeting}){
   if(root.parentElement!==(portal||document.body))(portal||document.body).append(root);
   const task=guideTask(page,state,preferred);root.hidden=!state.open||!task||!!greeting;if(root.hidden)return;
   root.dataset.app=page==='assistant'?'assistant':'portal';
+  const nextGate='blissify-lesson:'+location.search+':'+state.activeRole+':'+task.id;if(nextGate!==gateKey){gateKey=nextGate;lastTick=performance.now();if(!gates.has(gateKey)){let acknowledged=false;try{acknowledged=sessionStorage.getItem(gateKey)==='1'}catch{}gates.set(gateKey,{elapsed:acknowledged?LESSON_VIEW_MS:0,acknowledged})}}
   const options=tasks.filter(t=>t.role===state.activeRole||t.id===task.id);
   if(current!==task.id||select.dataset.role!==state.activeRole){current=task.id;select.replaceChildren(...options.map(t=>{const option=document.createElement('option');option.value=t.id;option.textContent=t.title;return option}));select.value=task.id;select.dataset.role=state.activeRole;root.querySelector('#guide-why').textContent=lessons[task.id].why;hint.textContent=lessons[task.id].hint;hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'}
-  select.value=task.id;
+  select.value=task.id;refreshGate();
   const missing=task.deps.filter(id=>!state[id]);root.querySelector('#guide-status').textContent=roleName(task.role)+' · '+(state[task.id]?'Completed':missing.length?'Waiting on '+missing.length+' prerequisite'+(missing.length===1?'':'s'):'Ready to work on');const waiting=root.querySelector('#guide-waiting');waiting.hidden=missing.length===0;waiting.querySelector('ul').replaceChildren(...missing.map(id=>{const item=document.createElement('li');item.textContent=tasks.find(t=>t.id===id)?.title||id;return item}));
 
   if(pinned)setOpen(true);
