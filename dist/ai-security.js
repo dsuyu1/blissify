@@ -9,3 +9,5 @@ export function reconcileSecurityProgress(state){
  if(state.injection&&!state.attackObserved)return {...state,injection:false,planned:false,reviewed:false,approved:false};
  return state;
 }
+
+export const inspectionCorrect=id=>id==='instruction';

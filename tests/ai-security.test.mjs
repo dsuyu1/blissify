@@ -10,3 +10,20 @@ test('legacy completion cannot show a flagged quote before source investigation'
  const valid={...stale,attackObserved:true};assert.deepEqual(reconcileSecurityProgress(valid),valid);
  assert.deepEqual(reconcileSecurityProgress(repaired),repaired);
 });
+
+import {inspectionCorrect} from '../dist/ai-security.js';
+import {validateRolePatch} from '../server/room-state.js';
+test('inspection awards the milestone only for the embedded instruction',()=>{
+ for(const id of ['client','price','service','requirements',''])assert.equal(inspectionCorrect(id),false);
+ assert.equal(inspectionCorrect('instruction'),true);
+ assert.match(validateRolePatch({attackObserved:true},'PLN-03',{}),/Select/);
+ assert.match(validateRolePatch({attackObserved:true,inspectionSelection:'price'},'PLN-03',{}),/Select/);
+ assert.equal(validateRolePatch({attackObserved:true,inspectionSelection:'instruction'},'PLN-03',{}),'');
+ assert.match(validateRolePatch({attackObserved:true,inspectionSelection:'instruction'},'REV-04',{}),/cannot/);
+});
+test('flagging requires selected evidence and a correct explanation',()=>{
+ const current={attackObserved:true};
+ assert.match(validateRolePatch({injection:true},'PLN-03',current),/explain/);
+ assert.match(validateRolePatch({injection:true,flagSelection:'instruction',flagReason:'pricing'},'PLN-03',current),/explain/);
+ assert.equal(validateRolePatch({injection:true,flagSelection:'instruction',flagReason:'override'},'PLN-03',current),'');
+});
