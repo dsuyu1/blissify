@@ -147,3 +147,18 @@
 [data-theme=dark] .ai-mascot-avatar{background:#39374b}
 .ai-mascot-message{background:#e8e5f1!important;border-radius:50%!important;object-fit:cover}
 @media(max-width:700px){.ai-mascot-avatar.ai-mascot-welcome{width:58px;height:58px}}
+
+/* Let the welcome mascot rise through the greeting circle on arrival. */
+.ai-mascot-avatar.ai-mascot-welcome{position:relative;overflow:hidden;isolation:isolate;background:transparent;border-radius:50%}
+.ai-mascot-avatar.ai-mascot-welcome::before{content:"";position:absolute;inset:0;border-radius:50%;background:#e8e5f1;z-index:-1}
+[data-theme=dark] .ai-mascot-avatar.ai-mascot-welcome::before{background:#39374b}
+.ai-mascot-avatar.ai-mascot-welcome img{object-fit:cover;transform:scale(1.85);transform-origin:50% 10%;animation:mascot-welcome-rise 1s cubic-bezier(.22,1,.36,1) both}
+@keyframes mascot-welcome-rise{from{transform:translateY(100%) scale(1.85)}to{transform:translateY(0) scale(1.85)}}
+.workspace-disclosure>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;font-weight:600;list-style:none}
+.workspace-disclosure>summary::before{content:'›';font-size:22px;transition:transform .2s}
+.workspace-disclosure[open]>summary::before{transform:rotate(90deg)}
+.workspace-disclosure>summary:hover{color:#8f8cff}
+.workspace-disclosure{margin:12px 0}
+.assistant-workspace-grid #chat-sources{min-width:0}
+.assistant-workspace-grid .assistant-document{padding:14px 0}
+@media(prefers-reduced-motion:reduce){.ai-mascot-avatar.ai-mascot-welcome img{animation:none}.workspace-disclosure>summary::before{transition:none}}

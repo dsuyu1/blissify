@@ -23,9 +23,9 @@ export function createLearningGuide(onChoose){
  root.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();pinned=false;remember();setOpen(false);ignoreFocus=true;toggle.focus();ignoreFocus=false}});
  select.addEventListener('change',()=>onChoose(select.value));
  hintToggle.addEventListener('click',()=>{if(shownHints.has(current))shownHints.delete(current);else shownHints.add(current);hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'});
- return {update({page,state,preferred,portal}){
+ return {update({page,state,preferred,portal,greeting}){
   if(root.parentElement!==(portal||document.body))(portal||document.body).append(root);
-  const task=guideTask(page,state,preferred);root.hidden=!state.open||!task;if(root.hidden)return;
+  const task=guideTask(page,state,preferred);root.hidden=!state.open||!task||!!greeting;if(root.hidden)return;
   root.dataset.app=page==='assistant'?'assistant':'portal';
   const options=tasks.filter(t=>t.role===state.activeRole||t.id===task.id);
   if(current!==task.id||select.dataset.role!==state.activeRole){current=task.id;select.replaceChildren(...options.map(t=>{const option=document.createElement('option');option.value=t.id;option.textContent=t.title;return option}));select.value=task.id;select.dataset.role=state.activeRole;root.querySelector('#guide-why').textContent=lessons[task.id].why;hint.textContent=lessons[task.id].hint;hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'}
