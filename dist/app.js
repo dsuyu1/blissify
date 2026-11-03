@@ -1,3 +1,4 @@
+import { checkReportReason } from './reporting.js';
 import { tasks, taskReason, pageReason, actionTasks } from './workflow.js';
 import { planTasks, levelNames, taskStatus } from './planner.js';
 import { connectRoom } from './room-sync.js';
@@ -30,7 +31,7 @@ const footer=()=>`<footer>Blissify · Wedding operations <a href="#flow">Worksho
 let reportingMessage=null;
 const reportKinds={payment:'Changed payment details or urgent payment',code:'Asked for a sign-in or verification code',data:'Asked for confidential or unredacted information',identity:'Impersonation or pressure to bypass a procedure',other:'Something else'};
 const reportExpected={3:['payment','identity'],8:['payment','identity'],5:['code','identity'],6:['data','identity']};
-function reportDialog(){return `<dialog id="report-dialog" aria-labelledby="report-heading"><div class="report-content"><h2 id="report-heading">Report suspicious message</h2><p id="report-caller"></p><p>Select the concern you would send to your security team.</p><label class="field"><span>Reason for reporting</span><select id="report-reason"><option value="">Choose a reason</option>${Object.entries(reportKinds).map(([id,label])=>`<option value="${id}">${label}</option>`).join('')}</select></label><label class="field"><span>Additional details (optional)</span><textarea id="report-notes" maxlength="400" placeholder="What made you pause?"></textarea></label><p id="report-feedback" role="status" aria-live="polite"></p><div class="actions"><button class="primary" data-action="send-report">Send report</button><button data-action="close-report">Cancel</button></div><p class="muted">Reports are recorded with your team’s progress.</p></div></dialog>`}
+function reportDialog(){return `<dialog id="report-dialog" aria-labelledby="report-heading"><div class="report-content"><h2 id="report-heading">Report suspicious message</h2><p id="report-caller"></p><p>Select the concern you would send to your security team.</p><label class="field"><span>Reason for reporting</span><select id="report-reason" aria-describedby="report-feedback"><option value="">Choose a reason</option>${Object.entries(reportKinds).map(([id,label])=>`<option value="${id}">${label}</option>`).join('')}</select></label><label class="field"><span>Additional details (optional)</span><textarea id="report-notes" maxlength="400" placeholder="What made you pause?"></textarea></label><p id="report-feedback" role="status" aria-live="polite"></p><div class="actions"><button class="primary" data-action="send-report">Send report</button><button data-action="close-report">Cancel</button></div><p class="muted">Reports are recorded with your team’s progress.</p></div></dialog>`}
 const durations={1:'0:30',2:'0:28',3:'0:32',4:'0:30',5:'0:30',6:'0:35',7:'0:36',8:'0:27'};
 const contactPortraits={1:'camille',2:'jordan',3:'morgan',4:'morgan',5:'taylor',6:'avery',7:'elena',8:'elena'};
 function contactAvatar(n){const person=contactPortraits[n];return `<span class="caller-avatar" aria-hidden="true">${person?`<img src="assets/contacts/${person}.jpg" alt="" width="42" height="42" loading="lazy">`:esc(messages[n].sender[0])}</span>`}
@@ -93,17 +94,16 @@ app.addEventListener('click',async e=>{const action=e.target.closest('[data-acti
  document.getElementById('report-caller').textContent=messages[reportingMessage].sender+' — '+messages[reportingMessage].subject;
  document.getElementById('report-reason').value=state.reports?.[reportingMessage]?.reason||'';
  document.getElementById('report-notes').value=state.reports?.[reportingMessage]?.notes||'';
- document.getElementById('report-feedback').textContent='';
+ document.getElementById('report-feedback').textContent='';document.getElementById('report-feedback').dataset.result='';document.getElementById('report-reason').removeAttribute('aria-invalid');
  document.querySelector('#report-dialog [data-action="close-report"]').textContent='Cancel';
  document.getElementById('report-dialog').showModal();return;
  }
  if(action==='close-report'){document.getElementById('report-dialog').close();return}
  if(action==='send-report'){
- const reason=value('report-reason');if(!reportKinds[reason]){document.getElementById('report-feedback').textContent='Choose a reason before sending the report.';document.getElementById('report-reason').focus();return}
+ const reason=value('report-reason');const validation=checkReportReason(reportingMessage,reportKinds[reason]?reason:'');const feedback=document.getElementById('report-feedback');feedback.textContent=validation.message;feedback.dataset.result=validation.ok?'success':'error';document.getElementById('report-reason').setAttribute('aria-invalid',String(!validation.ok));
+ if(!validation.ok){document.getElementById('report-reason').focus();return}
  state.reports??={};state.reports[reportingMessage]={reason,notes:value('report-notes').slice(0,400),reportedAt:new Date().toISOString()};save();
  for(const badge of app.querySelectorAll('[data-report-badge="'+reportingMessage+'"]'))badge.textContent='Reported';
- const expected=reportExpected[reportingMessage];
- document.getElementById('report-feedback').textContent=!expected?'Report saved. This is a routine request or verified contact in this scenario. Compare it with your records. Reporting uncertainty is okay; the format alone does not establish fraud.':expected.includes(reason)?'Report saved. You identified a concern. Keep payment or disclosure paused and verify through the trusted directory.':'Report saved. Review what the caller is asking you to do. You can revise your reason.';
  document.querySelector('#report-dialog [data-action="close-report"]').textContent='Done';return;
  }
 
