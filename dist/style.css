@@ -28,3 +28,50 @@ a.primary{padding:10px 18px;border-radius:7px}
 /* Make the message reporting action easy to identify. */
 .m365-workspace button[data-action="report-message"]{color:#b42318;background:#fff1f0;border-color:#e4a39d}
 .m365-workspace button[data-action="report-message"]:hover{color:#fff;background:#b42318;border-color:#b42318}
+/* Station-local appearance preference. Documents retain a white paper canvas. */
+.theme-toggle{white-space:nowrap;color:#555;font-size:12px!important;padding:5px 9px!important;border-radius:5px!important}
+:root[data-theme=dark]{color-scheme:dark;--paper:#191a1d;--ink:#e5e5e8;--muted:#b4b4bd;--line:#3d3e46;--wash:#292b32;--action:#aaa4ff}
+[data-theme=dark] body{background:#191a1d;color:#e5e5e8}
+[data-theme=dark] .m365-workspace{--paper:#202126;--ink:#e5e5e8;--muted:#b4b4bd;--line:#3d3e46;--wash:#303139;--action:#aaa4ff;background:#1c1d22;color:#e5e5e8}
+[data-theme=dark] .m365-workspace :is(h1,h2,h3){color:#eeeef2}
+[data-theme=dark] :is(.suite-bar,.app-rail){background:#202126;border-color:#3b3c44;color:#d1d1d8}
+[data-theme=dark] .suite-bar :is(a,strong,.theme-toggle){color:#c4bfff}
+[data-theme=dark] .workspace-search{background:#303138;border-color:#474852}
+[data-theme=dark] .workspace-search input{color:#e5e5eb;background:transparent!important}
+[data-theme=dark] :is(.channel-header,.workspace-command){background:#24252b;border-color:#3b3c44;color:#c6c6ce}
+[data-theme=dark] .channel-header nav>a,[data-theme=dark] .workspace-command a{color:#c6c6ce}
+[data-theme=dark] .m365-workspace .shell>aside{background:#24252b;border-color:#3b3c44}
+[data-theme=dark] .m365-workspace .workspace{background:#1c1d22}
+[data-theme=dark] .m365-workspace .shell>aside nav a{color:#c6c6ce}
+[data-theme=dark] .m365-workspace .shell>aside nav a.active{background:#373443;color:#d2caff}
+[data-theme=dark] .pinned-room{color:#ddd!important}
+[data-theme=dark] .m365-workspace :is(.role-panel,.sheet,.summary>div,.role-grid article,.drive-list,.voicemail-row,.plan-card,.planner-levels>div,table,.profile-popover,.launcher-popover){background:#27282f;border-color:#41424b;color:#dedee5}
+[data-theme=dark] :is(.profile-popover strong,.launcher-popover>strong,.launcher-grid a){color:#e5e5eb}
+[data-theme=dark] .m365-workspace :is(.role-panel p,.muted,.summary span,.drive-list span,.caller-copy>span,.call-meta,.planner-toolbar>span){color:#b5b5c0}
+[data-theme=dark] .m365-workspace :is(input:not([type=checkbox]):not([type=radio]),select,textarea){background:#31323a;color:#e5e5eb;border-color:#575864}
+[data-theme=dark] .m365-workspace .role-panel select{background:#31323a;color:#e5e5eb}
+[data-theme=dark] .m365-workspace :is(.summary b,.contact-heading,.workspace-command){color:#d1d1dc}
+[data-theme=dark] .m365-workspace :is(th,.contact-heading){background:#24252b;color:#bfbfc9}
+[data-theme=dark] .m365-workspace :is(td,th,.drive-list>div,.task-row,.voicemail-row){border-color:#41424b}
+[data-theme=dark] .m365-workspace .voicemail-row[open]>summary{background:#373443}
+[data-theme=dark] .m365-workspace .callout{background:#302d43;color:#ddd8f5}
+[data-theme=dark] :is(.app-rail>a.selected,.app-rail>a:hover,.launcher-grid a:hover){background:#373443;color:#c1b7ff}
+[data-theme=dark] .planner-board>section{background:#24252b}
+[data-theme=dark] .planner-toolbar button{background:#2b2c34;color:#ddd;border-color:#555}
+[data-theme=dark] .planner-toolbar button.selected{background:#39304e;color:#d4c7ff;border-color:#a594e8}
+[data-theme=dark] .planner-table tr:has([aria-disabled=true]),[data-theme=dark] .plan-card:has([aria-disabled=true]){background:#222329;color:#999}
+[data-theme=dark] .level-1{--level-color:#92c8ff;--level-bg:#243448}
+[data-theme=dark] .level-2{--level-color:#f1ce8d;--level-bg:#3a3325}
+[data-theme=dark] .level-3{--level-color:#ceb1ff;--level-bg:#352c45}
+[data-theme=dark] .level-4{--level-color:#91d6ba;--level-bg:#243b32}
+[data-theme=dark] :is(.role-pill,.training-chip,.planner-total){background:#383342;color:#d4c7ef}
+[data-theme=dark] .ai-shell{--ai-bg:#212121;--ai-side:#171717;--ai-ink:#ececec;--ai-muted:#b4b4b4;--ai-line:#424242;--ai-field:#303030}
+[data-theme=dark] :is(.pdf-toolbar,.pdf-tools,.pdf-bottom){background:#282a31;border-color:#444}
+[data-theme=dark] .pdf-canvas{background:#34363c}
+[data-theme=dark] .m365-workspace .pdf-page :is(h2,h3){color:#222}
+[data-theme=dark] .pdf-page{color-scheme:light}
+[data-theme=dark] .m365-workspace button[data-action=report-message]{background:#4a292b;color:#ffb3ad;border-color:#ad5c58}
+[data-theme=dark] .m365-workspace button[data-action=report-message]:hover{background:#a9322c;color:white}
+[data-theme=dark] #milestone-panel{background:#20352c;color:#d1f3df}
+[data-theme=dark] footer{background:#202126;color:#bbb;border-color:#41424b}
+@media print{[data-theme=dark] .m365-workspace,[data-theme=dark] .m365-workspace .workspace{background:white;color:black}.theme-toggle{display:none}}
