@@ -311,3 +311,13 @@ a.primary{padding:10px 18px;border-radius:7px}
 .venue-contract>button{margin:10px 10px 10px 0}
 .contract-access input{display:block;width:100%;max-width:500px;margin:10px 0 16px}
 @media(max-width:760px){.venue-contract{padding:20px 16px}.venue-contract input,.venue-contract select{font-size:16px}#contract-signature{min-height:130px}}
+
+/* Shared task-action hierarchy. Navigation and toolbars retain their own controls. */
+body button.action-primary,.m365-workspace button.action-primary{background:#5b5fc7;color:#fff;border:1px solid #5b5fc7;font-weight:600}
+body button.action-primary:hover:not(:disabled),.m365-workspace button.action-primary:hover:not(:disabled){background:#4b4fae;color:#fff;border-color:#4b4fae}
+body button.action-secondary,.m365-workspace button.action-secondary{background:transparent;color:inherit;border:1px solid var(--line,#c7c7d1)}
+body button.action-tertiary,.m365-workspace button.action-tertiary{background:transparent;color:var(--action,#5b5fc7);border-color:transparent;box-shadow:none}
+body button.action-tertiary:hover:not(:disabled){text-decoration:underline;background:var(--wash,#eeeeF6)}
+/* Reporting keeps its established danger color. */
+body button#rival-report-send,.m365-workspace button[data-action=report-message]{background:#b42318;color:#fff;border-color:#b42318}
+.m365-workspace button[data-action=mark-good]{background:#23744b;color:#fff;border-color:#23744b}

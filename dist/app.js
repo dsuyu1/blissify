@@ -1,3 +1,4 @@
+import {installActionStyles} from './action-style.js';
 import {revealReply} from './typing.js';
 import {validSupportReport,reconcileSupportProgress,chatbotTopics} from './support-review.js';
 import {canOpenContract,validContractSignature,signaturePaths,reconcileContractProgress} from './contract.js';
@@ -302,3 +303,5 @@ app.addEventListener('drop',e=>{const zone=e.target.closest('[data-workspace-dro
 function receiveChatbotReport(){const requestKey='blissify-support-request:'+room,ackKey='blissify-support-ack:'+room;let request;try{request=JSON.parse(localStorage.getItem(requestKey)||'null')}catch{return}if(!request)return;const blocked=taskReason('supportReported',state);const valid=validSupportReport(request.report)&&Object.hasOwn(chatbotTopics,request.report?.topic||'');let message=blocked||(!valid?'Select the correct reason in the chatbot.':'');const ok=!message;if(ok){state.supportReport=request.report;state.supportReported=true;state.competitorDecision='reported';save();render();message='Chatbot reported. No document was shared. Your team earned 1 milestone.'}try{localStorage.setItem(ackKey,JSON.stringify({id:request.id,ok,message}));if(ok)localStorage.removeItem(requestKey)}catch{}}
 window.addEventListener('storage',e=>{if(e.key==='blissify-support-request:'+room)receiveChatbotReport()});
 setTimeout(receiveChatbotReport,0);
+
+installActionStyles();

@@ -58,3 +58,6 @@
 #guide-reading-progress::-webkit-progress-value{background:#7160d8;border-radius:999px;transition:width .28s linear}
 #guide-reading-progress::-moz-progress-bar{background:#7160d8;border-radius:999px;transition:width .28s linear}
 @media(prefers-reduced-motion:reduce){#guide-reading-progress::-webkit-progress-value{transition:none}#guide-reading-progress::-moz-progress-bar{transition:none}}
+
+#guide-hint-toggle,#guide-acknowledge{background:#5b5fc7;color:#fff;border-color:#5b5fc7;font-weight:600}
+#guide-hint-toggle:hover:not(:disabled),#guide-acknowledge:hover:not(:disabled){background:#4b4fae;color:#fff;border-color:#4b4fae}

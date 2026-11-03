@@ -1,3 +1,4 @@
+import {installActionStyles} from './action-style.js';
 import {chatbotTopics,validSupportReport} from './support-review.js';
 const room=(new URLSearchParams(location.search).get('room')||'rehearsal').replace(/[^a-zA-Z0-9-]/g,'').slice(0,40)||'rehearsal';
 const requestKey=`blissify-support-request:${room}`,ackKey=`blissify-support-ack:${room}`;
@@ -17,3 +18,5 @@ document.getElementById('rival-report-send').addEventListener('click',()=>{
  pendingId=crypto.randomUUID();try{localStorage.setItem(requestKey,JSON.stringify({id:pendingId,report}));feedback.textContent='Report sent to your Blissify workspace. Keep the Coordination workspace open to record your score.';}catch{feedback.textContent='Progress storage is unavailable. Open Blissify and try again.'}
 });
 window.addEventListener('storage',e=>{if(e.key!==ackKey)return;try{const ack=JSON.parse(e.newValue);if(ack.id!==pendingId)return;document.getElementById('rival-report-feedback').textContent=ack.message;if(ack.ok)document.getElementById('rival-report-send').disabled=true}catch{}});
+
+installActionStyles();
