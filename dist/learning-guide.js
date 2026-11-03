@@ -2,7 +2,7 @@ import {tasks,roleName} from './workflow.js';
 import {guideTask,lessons} from './guide-content.js';
 export function createLearningGuide(onChoose){
  const root=document.createElement('aside');root.id='learning-guide';root.hidden=true;
- root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>AI SECURITY · TASK GUIDE</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><h2>Why this matters</h2><p id="guide-why"></p><button type="button" id="guide-hint-toggle" aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></section><button type="button" id="guide-toggle" aria-expanded="false" aria-controls="learning-guide-panel"><span aria-hidden="true">i</span><span>Why this matters</span></button>';
+ root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>AI SECURITY · TASK GUIDE</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><details id="guide-waiting" hidden><summary>View prerequisites</summary><ul></ul></details><h2>Why this matters</h2><p id="guide-why"></p><button type="button" id="guide-hint-toggle" aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></section><button type="button" id="guide-toggle" aria-expanded="false" aria-controls="learning-guide-panel"><span aria-hidden="true">i</span><span>Why this matters</span></button>';
  document.body.append(root);
  const panel=root.querySelector('section'),toggle=root.querySelector('#guide-toggle'),hint=root.querySelector('#guide-hint'),hintToggle=root.querySelector('#guide-hint-toggle'),select=root.querySelector('select');
  let pinned=false,opened=false,current='',animation=null,ignoreFocus=false;const shownHints=new Set();
@@ -30,7 +30,8 @@ export function createLearningGuide(onChoose){
   const options=tasks.filter(t=>t.role===state.activeRole||t.id===task.id);
   if(current!==task.id||select.dataset.role!==state.activeRole){current=task.id;select.replaceChildren(...options.map(t=>{const option=document.createElement('option');option.value=t.id;option.textContent=t.title;return option}));select.value=task.id;select.dataset.role=state.activeRole;root.querySelector('#guide-why').textContent=lessons[task.id].why;hint.textContent=lessons[task.id].hint;hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Show a hint':'Hide hint'}
   select.value=task.id;
-  const missing=task.deps.filter(id=>!state[id]);root.querySelector('#guide-status').textContent=roleName(task.role)+' · '+(state[task.id]?'Completed':missing.length?'Waiting for '+missing.map(id=>tasks.find(t=>t.id===id)?.title||id).join('; '):'Ready to work on');
+  const missing=task.deps.filter(id=>!state[id]);root.querySelector('#guide-status').textContent=roleName(task.role)+' · '+(state[task.id]?'Completed':missing.length?'Waiting on '+missing.length+' prerequisite'+(missing.length===1?'':'s'):'Ready to work on');const waiting=root.querySelector('#guide-waiting');waiting.hidden=missing.length===0;waiting.querySelector('ul').replaceChildren(...missing.map(id=>{const item=document.createElement('li');item.textContent=tasks.find(t=>t.id===id)?.title||id;return item}));
+
   if(pinned)setOpen(true);
  }};
 }
