@@ -1,4 +1,4 @@
-import {reportIsFinal} from '../dist/reporting.js';
+import {reportIsFinal,checkGoodMessage} from '../dist/reporting.js';
 import {tasks} from '../dist/workflow.js';
 export const sharedKeys=['attackObserved','paymentRejected','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','guestBrief','plannedBy','chatMessages','chatAttachments','documentEdits','reports','declinedDocuments','verified','redacted','injection','planned','reviewed','approved','incidents','reply','competitorDecision','safetyReady','aiSettings'];
 export function mergeRoom(current,patch,baseRevision){
@@ -11,7 +11,7 @@ export function mergeRoom(current,patch,baseRevision){
 
 export function validateRolePatch(patch,role,current){
  if(!['VEN-01','DAT-02','PLN-03','REV-04'].includes(role))return 'Select a station role before updating tasks.';
- if('reports' in patch){if(!patch.reports||typeof patch.reports!=='object'||Array.isArray(patch.reports))return 'Invalid reports.';for(const [id,report] of Object.entries(current.reports||{})){if(reportIsFinal(report,id)&&JSON.stringify(patch.reports[id])!==JSON.stringify(report))return 'Submitted reports cannot be changed.';}}
+ if('reports' in patch){if(!patch.reports||typeof patch.reports!=='object'||Array.isArray(patch.reports))return 'Invalid reports.';for(const [id,report] of Object.entries(patch.reports)){if(report?.disposition==='good'&&!checkGoodMessage(id).ok)return 'This message cannot be confirmed good.';}for(const [id,report] of Object.entries(current.reports||{})){if(reportIsFinal(report,id)&&JSON.stringify(patch.reports[id])!==JSON.stringify(report))return 'Submitted reports cannot be changed.';}}
  const owners={documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
  const derived=['planned','reviewed','approved','privacyConfirmed','reply','chatMessages','chatAttachments'];
  for(const [key,value] of Object.entries(patch)){

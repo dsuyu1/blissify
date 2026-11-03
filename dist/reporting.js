@@ -7,4 +7,9 @@ export function checkReportReason(message,reason){
  return {ok:true,message:expectedReasons[message]?'Correct reason — report saved. Keep the requested action paused and verify through a trusted contact.':'Report saved for review. This is a routine request; reporting uncertainty is okay. Describe your concern in the notes when possible.'};
 }
 
-export function reportIsFinal(report,message){return !!report&&checkReportReason(message,report.reason).ok}
+export function reportIsFinal(report,message){return !!report&&(report.disposition==='good'?checkGoodMessage(message).ok:!!expectedReasons[message]&&checkReportReason(message,report.reason).ok)}
+
+export function checkGoodMessage(message){
+ if([1,2,4,7].includes(Number(message)))return {ok:true,message:'Confirmed good — this message makes a routine request. Your decision is saved.'};
+ return {ok:false,message:'Not quite — this message asks you to bypass a safety check or share protected information. Review the requested action and report the concern instead. Your decision has not been saved.'};
+}

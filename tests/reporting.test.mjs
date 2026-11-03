@@ -14,3 +14,16 @@ test('accepted reports lock across shared stations while incorrect reasons remai
  assert.equal(validateRolePatch({reports:{3:accepted,5:{reason:'code'}}},'VEN-01',{reports:{3:accepted}}),'');
  assert.equal(validateRolePatch({reports:{3:accepted}},'VEN-01',{reports:{3:{reason:'other'}}}),'');
 });
+
+import {checkGoodMessage} from '../dist/reporting.js';
+import {taskBlock} from '../dist/roles.js';
+test('good confirmations accept routine messages, reject phishing and lock the final decision',()=>{
+ for(const id of [1,2,4,7]){assert.equal(checkGoodMessage(id).ok,true);assert.equal(reportIsFinal({disposition:'good'},id),true)}
+ for(const id of [3,5,6,8,99]){assert.equal(checkGoodMessage(id).ok,false);assert.equal(reportIsFinal({disposition:'good'},id),false)}
+ assert.equal(reportIsFinal({reason:'other'},1),false);
+ assert.equal(validateRolePatch({reports:{3:{disposition:'good'}}},'VEN-01',{}),'This message cannot be confirmed good.');
+ assert.equal(validateRolePatch({reports:{1:{disposition:'good'}}},'VEN-01',{}),'');
+ assert.equal(validateRolePatch({reports:{}},'VEN-01',{reports:{1:{disposition:'good'}}}),'Submitted reports cannot be changed.');
+ assert.equal(taskBlock('mark-good',{activeRole:'VEN-01'}),'');
+ assert.match(taskBlock('mark-good',{activeRole:'DAT-02'}),/permission/);
+});
