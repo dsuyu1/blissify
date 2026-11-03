@@ -8,6 +8,6 @@ export const roles=[
 export function taskBlock(action,state){
  if(action.startsWith('confirm-')&&action!=='confirm-input')return taskReason(action.slice(8),state);
  if(actionTasks[action])return taskReason(actionTasks[action],state);
- const role=action.startsWith('attach-')||['suggest-plan','new-chat','remove-attachment','preview-input','confirm-input','close-input'].includes(action)?'PLN-03':['report-message','send-report','mark-good','bank'].includes(action)?'VEN-01':null;
+ const role=action.startsWith('attach-')||['chat-send','help-template','suggest-plan','new-chat','remove-attachment','preview-input','confirm-input','close-input'].includes(action)?'PLN-03':['report-message','send-report','mark-good','bank'].includes(action)?'VEN-01':null;
  return role&&role!==state.activeRole?`You do not have permission to access this task. Assigned to ${roleName(role)}.`:'';
 }

@@ -177,3 +177,6 @@
 .reply-typing::after{content:'';display:inline-block;width:7px;height:1em;margin-left:3px;vertical-align:-2px;background:currentColor;opacity:.7;animation:reply-caret .7s steps(1) infinite}
 @keyframes reply-caret{50%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.reply-typing::after{animation:none}}
+
+.chat-template-menu{margin-top:18px}.chat-template-menu>summary{cursor:pointer;color:var(--ai-muted);font-size:14px;padding:10px 0}.chat-template-menu .ow-suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.chat-template-menu .ow-suggestions button{min-width:0;text-align:left}.chat-template-menu .ow-suggestions button span{display:block;font-size:12px}
+@media(max-width:650px){.chat-template-menu .ow-suggestions{grid-template-columns:1fr}}
