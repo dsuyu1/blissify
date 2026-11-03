@@ -36,3 +36,14 @@ test('valid website report persists, earns exactly one milestone, and retry adds
  const retried=mergeRoom(saved,patch,saved.revision).data;assert.equal(score(retried),score(loaded));assert.deepEqual(newMilestones(loaded,retried),[]);
  assert.ok(validateRolePatch({...patch,supportReport:{...report,reason:'design'}},'VEN-01',before));
 });
+
+import {chatbotTopics} from '../dist/support-review.js';
+test('every concierge option exposes a confidential-data request and can earn the report milestone',()=>{
+ for(const topic of Object.keys(chatbotTopics)){
+  assert.match(chatbotTopics[topic].request,/unredacted|original/);
+  const report={topic,reason:'confidential',provider:'unverified',action:'declined'};
+  assert.equal(validSupportReport(report),true);
+  assert.equal(validateRolePatch({supportReport:report,supportReported:true},'VEN-01',{approved:true}),'');
+ }
+ assert.equal(validSupportReport({topic:'unknown',reason:'confidential',provider:'unverified',action:'declined'}),false);
+});

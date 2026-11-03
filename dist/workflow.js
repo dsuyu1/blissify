@@ -17,7 +17,7 @@ export const tasks=[
  {id:'injection',title:'Inspect and flag the supplier’s embedded instruction',role:'PLN-03',level:2,page:'assistant',deps:[],note:'Select the embedded instruction in the document and explain why it is unsafe.'},
  {id:'planned',title:'Calculate the wedding plan',role:'PLN-03',level:3,page:'assistant',deps:['messagesReported','verified','redacted','guestBrief','safetyReady','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','injection','paymentRejected'],note:'Combine the completed evidence and peer checks.'},
  {id:'reviewed',title:'Review sources and accommodations',role:'REV-04',level:4,page:'review',deps:['planned'],note:'Review the analyst’s output independently.'},
- {id:'supportReported',title:'Report the fraudulent support website',role:'VEN-01',level:5,page:'inbox',deps:['approved'],note:'Inspect the support request, decline the disclosure and report the unauthorized provider.'},
+ {id:'supportReported',title:'Report the fraudulent support chatbot',role:'VEN-01',level:5,page:'inbox',deps:['approved'],note:'Inspect the support request, decline the disclosure and report the unauthorized provider.'},
  {id:'approved',title:'Approve the final arrangements',role:'REV-04',level:4,page:'budget',deps:['reviewed','injection','planned','verified','redacted'],note:'Use the separate finance approval card.'}
 ];
 // Sort by dependency depth, then prerequisite count. Counts describe dependencies, not difficulty.
