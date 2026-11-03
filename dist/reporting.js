@@ -6,3 +6,5 @@ export function checkReportReason(message,reason){
  if(!expected.includes(reason))return {ok:false,message:'Not quite — choose a different reason. '+(hints[message]||'This contact makes a routine request. If you are unsure, choose “Something else” and describe your concern.')+' Your report has not been saved.'};
  return {ok:true,message:expectedReasons[message]?'Correct reason — report saved. Keep the requested action paused and verify through a trusted contact.':'Report saved for review. This is a routine request; reporting uncertainty is okay. Describe your concern in the notes when possible.'};
 }
+
+export function reportIsFinal(report,message){return !!report&&checkReportReason(message,report.reason).ok}

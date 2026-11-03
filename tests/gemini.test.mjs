@@ -4,7 +4,7 @@ import {chat} from '../server/worker.js';
 import {SYSTEM_INSTRUCTION} from '../server/planner-prompt.js';
 import {documentFields} from '../dist/redaction.js';
 const privateIds=documentFields.filter(f=>f.sensitive).map(f=>f.id);
-const body={prompt:'Calculate the complete wedding budget.',marked:privateIds,applied:privateIds,attachments:['summary','quote','requirements']};
+const body={quoteReviewed:true,prompt:'Calculate the complete wedding budget.',marked:privateIds,applied:privateIds,attachments:['summary','quote','requirements']};
 const env={GEMINI_API_KEY:'fake-test-key',WORKSHOP_ACCESS_CODE:'fake-workshop-code',CHAT_LIMITER:{limit:async()=>({success:true})}};
 const req=(b=body,code='fake-workshop-code',origin='https://example.invalid')=>new Request('https://example.invalid/api/chat',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-Workshop-Code':code},body:JSON.stringify(b)});
 let calls=[];
@@ -27,3 +27,4 @@ test('provider failures and partial replies do not become successful plans',asyn
  const error=await chat(req(),env,async()=>Response.json({error:{message:'fake-test-key'}},{status:401}));assert.equal(error.status,502);assert.equal((await error.text()).includes('fake-test-key'),false);
  const partial=await chat(req(),env,async()=>Response.json({candidates:[{finishReason:'MAX_TOKENS',content:{parts:[{text:'unfinished'}]}}]}));assert.equal(partial.status,502);
 });
+test('unreviewed supplier instructions cannot be forwarded to Gemini',async()=>{calls=[];const r=await chat(req({...body,quoteReviewed:false}),env,provider);assert.equal(r.status,422);assert.equal(calls.length,0)});

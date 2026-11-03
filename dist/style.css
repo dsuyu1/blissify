@@ -82,3 +82,139 @@ a.primary{padding:10px 18px;border-radius:7px}
 .applied-redaction{min-height:24px}
 .pdf-page button.applied-redaction{display:block;width:100%;min-height:24px;border:0;border-radius:0;background:#111!important;padding:4px 10px;cursor:default}.pdf-page button.applied-redaction.eraser-target{cursor:crosshair}.pdf-page button.applied-redaction.eraser-target:hover{outline:2px solid #bd5c39;outline-offset:2px}.pdf-page button.applied-redaction:focus-visible{outline:3px solid #6264d4;outline-offset:3px}.pdf-toolbar button[data-action=undo-mark][aria-pressed=true]{background:#805034;color:white;border-color:#805034}
 .workspace-mark.wedding-team-icon{background:transparent;overflow:hidden}.wedding-team-icon img{display:block;object-fit:contain;width:29px;height:29px}
+.security-lab{margin-bottom:24px}.source-evidence{padding:15px;border-left:3px solid #a66b18;background:#fff6e6;margin:16px 0}.unsafe-output{margin:18px 0;padding:16px;background:#fff0ee;border:1px solid #e5aaa3;border-radius:5px;color:#7f3029}#ai-input-dialog{width:min(760px,calc(100% - 32px));max-height:85vh;overflow:auto;padding:28px;border:1px solid #ccc;border-radius:10px;background:#fff;color:#242424}#ai-input-dialog::backdrop{background:#0007}#ai-input-dialog pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;background:#f5f5f7;padding:18px;border-radius:5px;max-height:40vh;overflow:auto}#ai-input-dialog label{font-size:13px}.ai-composer .input-preview-button{font-size:11px;white-space:nowrap;padding:7px;align-self:center;color:var(--ai-ink)}[data-theme=dark] #ai-input-dialog{background:#24252b;color:#eee;border-color:#555}[data-theme=dark] #ai-input-dialog pre{background:#303139}[data-theme=dark] .source-evidence{background:#3d3427;color:#ead5ac}[data-theme=dark] .unsafe-output{background:#462b2b;color:#f5c1bb;border-color:#85504a}@media(max-width:650px){.ai-composer{flex-wrap:wrap}.ai-composer textarea{flex:1;min-width:130px}}
+
+/* Comfortable workspace sizing: use the full desktop canvas. */
+@media screen {
+ .m365-workspace{font-size:16px;line-height:1.55}
+ .m365-workspace .workspace{max-width:none;width:100%;padding:0 clamp(20px,2.2vw,44px) 44px}
+ .m365-workspace .workspace-page{max-width:none;width:100%;margin:0}
+ .m365-workspace h1{font-size:30px}
+ .m365-workspace h2{font-size:21px}
+ .m365-workspace h3{font-size:17px}
+ .m365-workspace .workspace-command{height:56px;font-size:14px}
+ .m365-workspace .role-panel{padding:16px 20px;grid-template-columns:95px minmax(240px,360px) minmax(0,1fr);gap:16px}
+ .m365-workspace .role-panel label,.m365-workspace .role-panel p{font-size:14px}
+ .m365-workspace .role-panel p{grid-column:auto}
+ .m365-workspace .role-panel select{font-size:15px;padding:10px}
+ .m365-workspace .level-strip{font-size:14px;padding:12px 16px}
+ .m365-workspace button,.m365-workspace a.primary{font-size:15px;min-height:40px;padding:9px 15px}
+ .m365-workspace input:not([type=checkbox]):not([type=radio]),.m365-workspace textarea{font-size:16px;padding:10px 12px}
+ .m365-workspace .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding:24px 0}
+ .m365-workspace .summary>div{padding:22px 24px}
+ .m365-workspace .summary b{font-size:34px}
+ .m365-workspace .summary span{font-size:15px}
+ .m365-workspace .columns{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(28px,3vw,64px)}
+ .m365-workspace .columns>*{min-width:0}
+ .m365-workspace .role-grid{gap:16px}
+ .m365-workspace .role-grid article{padding:20px}
+ .m365-workspace .role-grid p,.m365-workspace .role-grid a,.m365-workspace .task-row .muted{font-size:14px}
+ .m365-workspace .task-row strong,.m365-workspace .callout,.m365-workspace .checks{font-size:15px}
+ .m365-workspace .sheet{padding:24px}
+ .m365-workspace .caller-copy strong{font-size:16px}
+ .m365-workspace .caller-copy>span,.m365-workspace .call-meta,.m365-workspace .contact-heading{font-size:14px}
+ .m365-workspace .caller-avatar{width:44px;height:44px}
+ .m365-workspace .drive-list>div,.m365-workspace table,.m365-workspace .ai-header{font-size:15px}
+ .m365-workspace audio{width:100%;height:42px}
+}
+@media screen and (min-width:1001px){
+ .m365-workspace .shell{grid-template-columns:250px minmax(0,1fr)}
+ .m365-workspace .shell>aside nav a{font-size:15px;padding:12px;gap:12px}
+ .m365-workspace .shell>aside h2{font-size:19px}
+}
+@media screen and (max-width:1000px){
+ .m365-workspace .role-panel{grid-template-columns:95px minmax(0,1fr)}
+ .m365-workspace .role-panel p{grid-column:1/-1}
+ .m365-workspace .columns{grid-template-columns:1fr;gap:28px}
+}
+@media screen and (max-width:600px){
+ .m365-workspace .workspace{padding:0 16px 28px}
+ .m365-workspace .role-panel{grid-template-columns:1fr;padding:14px}
+ .m365-workspace .summary{grid-template-columns:1fr;gap:12px}
+ .m365-workspace .summary>div{padding:16px 20px}
+ .m365-workspace h1{font-size:26px}
+ .m365-workspace .workspace-command{flex-wrap:wrap;height:auto;min-height:56px;padding:10px 0}
+}
+
+/* Readable source document, including the supplier's embedded footer. */
+.supplier-quote{margin:22px 0;padding:clamp(20px,3vw,40px);background:#fff;color:#252525;border:1px solid #ccc;box-shadow:0 3px 14px #00000012;font:15px/1.6 'Segoe UI',Arial,sans-serif}
+.supplier-quote header{display:flex;flex-direction:column;border-bottom:2px solid #426252;padding-bottom:16px;margin-bottom:24px}
+.supplier-quote header strong{font-size:23px;letter-spacing:3px;color:#345343}
+.supplier-quote header span{color:#555}
+.m365-workspace .supplier-quote h3,[data-theme=dark] .m365-workspace .supplier-quote h3{color:#252525;font-size:21px}
+.m365-workspace .supplier-quote table,[data-theme=dark] .m365-workspace .supplier-quote table{width:100%;background:#fff;color:#252525;font-size:14px}
+.m365-workspace .supplier-quote :is(td,th),[data-theme=dark] .m365-workspace .supplier-quote :is(td,th){background:#fff;color:#252525;border-color:#ddd;padding:12px 8px}
+.supplier-quote footer{margin-top:36px;padding-top:14px;border-top:1px solid #ddd;font-size:13px;line-height:1.6;color:#555}
+.supplier-quote footer p{margin:6px 0 0}
+#report-dialog [data-action=send-report][hidden]{display:none}
+
+/* Microsoft workspace typography with native fallbacks from Fluent 2. */
+.m365-workspace{--font-ui:'Segoe UI','Segoe UI Web (West European)',-apple-system,BlinkMacSystemFont,Roboto,'Helvetica Neue',sans-serif;font-family:var(--font-ui)}
+.m365-workspace :is(h1,h2,h3,button,input,textarea,select){font-family:var(--font-ui)}
+.m365-workspace{--action:#5b5fc7;--fluent-blue:#0f6cbd;--fluent-success:#107c10;--fluent-danger:#c50f1f}
+
+/* OpenWebUI reference layout, keeping Blissify branding and workshop tools. */
+.m365-workspace .openweb-shell{--ai-bg:#fff;--ai-side:#f7f7f7;--ai-ink:#171717;--ai-muted:#6b6b6b;--ai-line:#e5e5e5;--ai-field:#f4f4f4;display:grid;grid-template-columns:260px minmax(0,1fr);border:0;border-radius:12px;min-height:760px;min-height:max(760px,calc(100dvh - 250px));background:var(--ai-bg);font-family:Arial,sans-serif}
+[data-theme=dark] .m365-workspace .openweb-shell{--ai-bg:#171717;--ai-side:#0d0d0d;--ai-ink:#e5e5e5;--ai-muted:#a3a3a3;--ai-line:#343434;--ai-field:#202020}
+.m365-workspace .openweb-shell :is(h1,h2,h3,button,input,textarea,select){font-family:Arial,sans-serif}
+.m365-workspace .openweb-shell :is(button,a){color:var(--ai-ink)}
+.m365-workspace .openweb-shell .ai-sidebar{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:18px 14px;border:0;background:var(--ai-side);font-size:16px}
+.m365-workspace .openweb-shell .ai-sidebar button{display:flex;align-items:center;gap:14px;border:0;background:transparent;min-height:44px;padding:10px;border-radius:8px;font-size:16px;box-shadow:none}
+.m365-workspace .openweb-shell .ai-sidebar button:hover{background:var(--ai-field)}
+.ow-sidebar-top{display:flex;align-items:center;gap:4px;margin-bottom:12px}
+.m365-workspace .openweb-shell .ow-icon{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:transparent;border:0;color:var(--ai-muted);width:38px;min-height:38px;padding:6px;font-size:22px}
+.m365-workspace .openweb-shell .ow-new-chat{flex:1;padding:6px;gap:10px;white-space:nowrap}
+.ow-logo{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:50%;width:30px;height:30px;background:var(--ai-ink);color:var(--ai-bg);font-weight:700;font-size:20px}
+.ow-edit{margin-left:auto;display:flex}
+.ow-chat-label{color:var(--ai-muted);margin:20px 10px 8px!important;font-size:14px}
+.ow-chat-date{color:var(--ai-muted);margin:8px 10px!important;font-size:13px}
+.m365-workspace .openweb-shell .ai-conversation{font-size:14px!important;margin:0;background:var(--ai-field)!important}
+.m365-workspace .openweb-shell .ai-sidebar-bottom{margin-top:auto;padding:40px 10px 4px;display:flex;align-items:center;gap:12px;font-size:14px}
+.ow-user-avatar{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#dfa33b;color:#fff;font-size:15px}
+.m365-workspace .openweb-shell .ai-header{height:70px;padding:12px 22px;display:flex;align-items:center;gap:18px;border:0;background:transparent;color:var(--ai-ink)}
+.ow-model{position:relative;margin-right:auto}
+.ow-model>summary{list-style:none;font-size:22px;font-weight:600;cursor:pointer;display:flex;gap:14px;align-items:center}
+.ow-model>div{position:absolute;top:100%;left:0;z-index:6;width:290px;background:var(--ai-side);border:1px solid var(--ai-line);box-shadow:0 8px 24px #0002;border-radius:12px;padding:18px;font-size:14px}
+.ow-model p{color:var(--ai-muted);margin:8px 0 0}
+.m365-workspace .openweb-shell .ai-main{min-width:0;background:var(--ai-bg)}
+.m365-workspace .openweb-shell .ai-thread{max-height:65vh;overflow-y:auto;padding:32px clamp(20px,4vw,72px);flex:1}
+.m365-workspace .openweb-shell.is-empty .ai-thread{flex:0;overflow:visible;max-height:none;padding:0}
+.m365-workspace .openweb-shell .ai-welcome{display:flex;justify-content:center;align-items:center;gap:18px;max-width:none;margin:clamp(60px,11vh,150px) 20px 46px;text-align:left}
+.m365-workspace .openweb-shell .ai-welcome .ow-logo{width:52px;height:52px;font-size:32px}
+.m365-workspace .openweb-shell .ai-welcome h1{color:var(--ai-ink);font-size:clamp(30px,3vw,44px);font-weight:500;letter-spacing:-1px;margin:0;line-height:1.2}
+.m365-workspace .openweb-shell .ai-compose-area{width:100%;max-width:1020px;margin:0 auto;padding:0 clamp(20px,3vw,46px) 26px}
+.m365-workspace .openweb-shell.has-messages .ai-compose-area{margin-top:auto}
+.m365-workspace .openweb-shell .ai-composer{display:grid;grid-template-columns:40px minmax(0,1fr) auto 42px;gap:10px;align-items:center;border:1px solid var(--ai-line);background:var(--ai-field);border-radius:28px;padding:16px 18px}
+.m365-workspace .openweb-shell .ai-composer textarea{grid-column:1/-1;grid-row:1;width:100%;min-width:0;min-height:64px;max-height:200px;margin:0;padding:4px 2px;border:0;background:transparent;box-shadow:none;color:var(--ai-ink);font-size:19px;line-height:1.5;resize:vertical}
+.openweb-shell textarea::placeholder{color:#8b8b8b;opacity:1}
+.m365-workspace .openweb-shell .ai-attachment-menu{grid-column:1;grid-row:2}
+.openweb-shell .ai-attachment-menu>summary{padding:0;font-size:30px;text-align:center;cursor:pointer}
+.ow-tool{display:flex;align-items:center;gap:8px;color:var(--ai-muted);font-size:14px;border-left:1px solid var(--ai-line);padding-left:16px}
+.m365-workspace .openweb-shell .input-preview-button{display:flex;align-items:center;gap:7px;background:transparent;border:0;color:var(--ai-muted);font-size:13px;padding:6px;min-height:36px}
+.m365-workspace .openweb-shell .ai-send{width:40px;min-width:40px;height:40px;min-height:40px;background:var(--ai-ink);color:var(--ai-bg);border:0;border-radius:50%;padding:0;font-size:25px}
+.m365-workspace .openweb-shell .ai-disclaimer{color:var(--ai-muted);font-size:12px;margin:12px 0;text-align:center}
+.ow-suggestions{margin:30px 18px 10px}
+.ow-suggestions>p{color:var(--ai-muted);font-size:14px}
+.m365-workspace .openweb-shell .ow-suggestions button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;background:transparent;border:0;border-radius:10px;padding:12px 14px;margin:2px 0;width:100%;color:var(--ai-ink)}
+.m365-workspace .openweb-shell .ow-suggestions button:hover{background:var(--ai-field)}
+.ow-suggestions strong{font-size:17px;font-weight:600}
+.ow-suggestions span{color:var(--ai-muted);font-size:14px}
+.m365-workspace .openweb-shell .ai-message{max-width:860px;margin:0 auto 28px;font-size:16px;line-height:1.7}
+.m365-workspace .openweb-shell .ai-user{background:var(--ai-field);border-radius:20px;padding:16px 22px;margin-left:auto;max-width:80%}
+.m365-workspace .openweb-shell .ai-answer{background:transparent;color:var(--ai-ink)}
+.m365-workspace .openweb-shell .ai-attachment-menu button{background:transparent;border:1px solid var(--ai-line);font-size:14px}
+.m365-workspace .openweb-shell .ow-expand{display:none}
+.m365-workspace .openweb-shell.sidebar-collapsed{grid-template-columns:1fr}
+.openweb-shell.sidebar-collapsed .ai-sidebar{display:none}
+.m365-workspace .openweb-shell.sidebar-collapsed .ow-expand{display:inline-flex}
+#chat-utility{width:min(650px,90vw);max-height:80vh;overflow:auto;border:1px solid var(--line);border-radius:16px;padding:28px;background:var(--paper);color:var(--ink)}
+#chat-utility textarea,#chat-utility input{display:block;width:100%;margin:10px 0 20px}
+#chat-results article{padding:14px 0;border-bottom:1px solid var(--line);white-space:pre-wrap}
+#chat-utility::backdrop{background:#0008}
+@media(max-width:1100px){.m365-workspace .openweb-shell{grid-template-columns:205px minmax(0,1fr)}.m365-workspace .openweb-shell .ai-sidebar button{font-size:14px;gap:9px}.ow-sidebar-top{flex-wrap:wrap}.ow-tool{font-size:12px;gap:4px;padding-left:8px}}
+@media(max-width:700px){.m365-workspace .openweb-shell{grid-template-columns:1fr;min-height:680px}.openweb-shell .ai-sidebar{display:none!important}.m365-workspace .openweb-shell .ow-expand{display:none}.m365-workspace .openweb-shell .ai-composer{grid-template-columns:32px minmax(0,1fr) 40px;padding:14px}.openweb-shell .ow-tool{display:none}.openweb-shell .input-preview-button{justify-self:end}.m365-workspace .openweb-shell .ai-welcome{margin-top:60px}.ow-model>summary{font-size:19px}.m365-workspace .openweb-shell .ai-compose-area{padding-inline:14px}.ow-suggestions{margin-inline:0}}
+@media(max-width:700px){
+ .m365-workspace .openweb-shell{position:relative}
+ .m365-workspace .openweb-shell .ow-expand{display:inline-flex}
+ .m365-workspace .openweb-shell.sidebar-mobile-open .ai-sidebar{display:flex!important;position:absolute;inset:0 auto 0 0;width:260px;z-index:8;box-shadow:8px 0 28px #0005}
+}
