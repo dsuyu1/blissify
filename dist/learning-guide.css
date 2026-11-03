@@ -19,3 +19,6 @@
 #quote-inspection #learning-guide{bottom:80px;right:18px}
 @media(max-width:760px){#learning-guide{right:12px;bottom:calc(80px + env(safe-area-inset-bottom))}#learning-guide[data-app=assistant]{bottom:calc(14px + env(safe-area-inset-bottom))}#guide-toggle>span:last-child{display:none}#guide-toggle{padding:7px;border-radius:50%}#learning-guide-panel{max-height:60dvh;padding:16px}#learning-guide-panel select{font-size:16px}#learning-guide-panel header button{min-width:44px;min-height:44px}#quote-inspection #learning-guide{bottom:80px;right:12px}}
 @media print{#learning-guide{display:none!important}}
+/* Do not inherit the portal's generic aside panel styling. */
+#learning-guide{padding:0!important;margin:0;background:transparent!important;border:0;box-shadow:none;border-radius:0;min-height:0;width:auto}
+#learning-guide-panel :is(h2,button,label){font-family:inherit}
