@@ -61,3 +61,5 @@
 
 #guide-hint-toggle,#guide-acknowledge{background:#5b5fc7;color:#fff;border-color:#5b5fc7;font-weight:600}
 #guide-hint-toggle:hover:not(:disabled),#guide-acknowledge:hover:not(:disabled){background:#4b4fae;color:#fff;border-color:#4b4fae}
+
+#learning-guide-panel header{font-size:14px;letter-spacing:0}
