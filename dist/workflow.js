@@ -1,3 +1,6 @@
+export const roleNames={'VEN-01':'Coordination','DAT-02':'Privacy','PLN-03':'Planning','REV-04':'Finance'};
+export const roleName=id=>roleNames[id]||'Unassigned';
+export const assignmentLabel=(id,currentRole)=>id&&id===currentRole?'Me':roleName(id);
 // Acyclic dependencies with rotating peer reviews. Each station has an independent start.
 export const tasks=[
  {id:'messagesReported',title:'Report the fraudulent voicemails',role:'VEN-01',level:1,page:'inbox',deps:[],note:'Identify and report all four fraudulent messages using the correct reasons.'},
@@ -18,6 +21,6 @@ export const tasks=[
  {id:'approved',title:'Approve the final arrangements',role:'REV-04',level:4,page:'budget',deps:['reviewed','injection','planned','verified','redacted'],note:'Use the separate finance approval card.'}
 ];
 export const pageRoles={inbox:['VEN-01'],documents:['DAT-02'],safety:['DAT-02'],assistant:['PLN-03'],review:['REV-04'],budget:['REV-04']};
-export function pageReason(page,role){return pageRoles[page]&&!pageRoles[page].includes(role)?`You do not have permission to access this app. Assigned to ${pageRoles[page].join(', ')}.`:''}
-export function taskReason(id,s){const t=tasks.find(t=>t.id===id);if(!t)return '';if(t.role!==s.activeRole)return `You do not have permission to access this task. Assigned to ${t.role}.`;const missing=t.deps.filter(k=>!s[k]);return missing.length?'Waiting for: '+missing.map(k=>tasks.find(t=>t.id===k)?.title||k).join('; '):''}
+export function pageReason(page,role){return pageRoles[page]&&!pageRoles[page].includes(role)?`You do not have permission to access this app. Assigned to ${pageRoles[page].map(roleName).join(', ')}.`:''}
+export function taskReason(id,s){const t=tasks.find(t=>t.id===id);if(!t)return '';if(t.role!==s.activeRole)return `You do not have permission to access this task. Assigned to ${roleName(t.role)}.`;const missing=t.deps.filter(k=>!s[k]);return missing.length?'Waiting for: '+missing.map(k=>tasks.find(t=>t.id===k)?.title||k).join('; '):''}
 export const actionTasks={'run-attack':'attackObserved','reject-payment':'paymentRejected','accept-payment':'paymentRejected',verify:'verified',unsafe:'verified','save-safety':'safetyReady','redact-tool':'redacted','mark-redaction':'redacted','undo-mark':'redacted','apply-redactions':'redacted','new-document':'redacted','share-document':'redacted','download-document':'redacted','preview-document':'redacted','decline-documents':'redacted','guest-brief':'guestBrief',injection:'injection',ask:'planned',review:'reviewed',approve:'approved'};
