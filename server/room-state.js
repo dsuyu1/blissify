@@ -1,9 +1,10 @@
+import {validSupportReport} from '../dist/support-review.js';
 import {validContractSignature} from '../dist/contract.js';
 import {reviewKeys,reviewOwners,checkPeerReview} from '../dist/peer-review.js';
 import {inspectionCorrect} from '../dist/ai-security.js';
 import {reportIsFinal,checkGoodMessage,fraudReportsComplete} from '../dist/reporting.js';
 import {tasks} from '../dist/workflow.js';
-export const sharedKeys=['contractCoSign','guestReview','venueReview','privacyReview','sourcesReview','flagSelection','flagReason','inspectionSelection','messagesReported','attackObserved','paymentRejected','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','guestBrief','plannedBy','chatMessages','chatAttachments','documentEdits','reports','declinedDocuments','verified','redacted','injection','planned','reviewed','approved','incidents','reply','competitorDecision','safetyReady','aiSettings'];
+export const sharedKeys=['supportReported','supportReport','contractCoSign','guestReview','venueReview','privacyReview','sourcesReview','flagSelection','flagReason','inspectionSelection','messagesReported','attackObserved','paymentRejected','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','guestBrief','plannedBy','chatMessages','chatAttachments','documentEdits','reports','declinedDocuments','verified','redacted','injection','planned','reviewed','approved','incidents','reply','competitorDecision','safetyReady','aiSettings'];
 export function mergeRoom(current,patch,baseRevision){
  if(!patch||typeof patch!=='object'||Array.isArray(patch))throw Error('Invalid patch');
  const keys=Object.keys(patch);if(keys.some(k=>!sharedKeys.includes(k)))throw Error('Unknown field');
@@ -20,7 +21,8 @@ export function validateRolePatch(patch,role,current){
  if(patch.injection===true&&(!inspectionCorrect(patch.flagSelection||current.flagSelection)||(patch.flagReason||current.flagReason)!=='override'))return 'Select the instruction and explain why it is unsafe first.';
  for(const [taskId,key] of Object.entries(reviewKeys)){if(patch[taskId]===true||key in patch){const result=checkPeerReview(taskId,patch[key]||current[key],{...current,...patch});if(!result.ok)return result.message;}}
  if((patch.financeReady===true||'contractCoSign' in patch)&&!validContractSignature(patch.contractCoSign||current.contractCoSign))return 'Verify and co-sign the venue contract first.';
- const owners={contractCoSign:'REV-04',...reviewOwners,attackObserved:'PLN-03',flagSelection:'PLN-03',flagReason:'PLN-03',inspectionSelection:'PLN-03',documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
+ if(patch.supportReported===true&&!validSupportReport(patch.supportReport||current.supportReport))return 'Identify the confidential data request and unverified provider first.';
+ const owners={supportReport:'VEN-01',competitorDecision:'VEN-01',contractCoSign:'REV-04',...reviewOwners,attackObserved:'PLN-03',flagSelection:'PLN-03',flagReason:'PLN-03',inspectionSelection:'PLN-03',documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
  const derived=['planned','reviewed','approved','privacyConfirmed','reply','chatMessages','chatAttachments'];
  for(const [key,value] of Object.entries(patch)){
   const task=tasks.find(t=>t.id===key);const owner=task?.role||owners[key];
