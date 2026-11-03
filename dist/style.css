@@ -322,6 +322,6 @@ body button.action-tertiary:hover:not(:disabled){text-decoration:underline;backg
 body button#rival-report-send,.m365-workspace button[data-action=report-message]{background:#b42318;color:#fff;border-color:#b42318}
 .m365-workspace button[data-action=mark-good]{background:#23744b;color:#fff;border-color:#23744b}
 /* Subtle fine print in the supplier document; still readable during inspection. */
-.m365-workspace .supplier-quote footer :is(strong,p),[data-theme=dark] .m365-workspace .supplier-quote footer :is(strong,p){font-size:11px;line-height:1.55;color:#737373}
-.inspection-paper footer>strong,.inspection-paper footer .inspection-text{font-size:12px;line-height:1.6;color:#737373}
+.m365-workspace .supplier-quote footer :is(strong,p),[data-theme=dark] .m365-workspace .supplier-quote footer :is(strong,p){font-size:9px;line-height:1.55;color:#929292}
+.inspection-paper footer>strong,.inspection-paper footer .inspection-text{font-size:10px;line-height:1.6;color:#929292}
 .inspection-paper footer .inspection-text:hover,.inspection-paper footer .inspection-text:focus-visible{color:#333}
