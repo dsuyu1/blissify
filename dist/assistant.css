@@ -173,3 +173,7 @@
 [data-workspace-drop].drag-over .workspace-dropzone{border-color:var(--action);background:var(--wash)}
 @media(max-width:900px){.assistant-workspace-grid{grid-template-columns:minmax(0,1fr)!important}.workspace-file-panel{position:static;order:-1}}
 @media(prefers-reduced-motion:reduce){.ai-mascot-avatar.ai-mascot-welcome.mascot-enter img{animation:none}}
+
+.reply-typing::after{content:'';display:inline-block;width:7px;height:1em;margin-left:3px;vertical-align:-2px;background:currentColor;opacity:.7;animation:reply-caret .7s steps(1) infinite}
+@keyframes reply-caret{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.reply-typing::after{animation:none}}
