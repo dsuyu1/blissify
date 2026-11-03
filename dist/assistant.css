@@ -180,3 +180,7 @@
 
 .chat-template-menu{margin-top:18px}.chat-template-menu>summary{cursor:pointer;color:var(--ai-muted);font-size:14px;padding:10px 0}.chat-template-menu .ow-suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.chat-template-menu .ow-suggestions button{min-width:0;text-align:left}.chat-template-menu .ow-suggestions button span{display:block;font-size:12px}
 @media(max-width:650px){.chat-template-menu .ow-suggestions{grid-template-columns:1fr}}
+
+.reply-thinking{color:var(--ai-muted);font-style:italic;animation:thinking-breathe 1s ease-in-out infinite}
+@keyframes thinking-breathe{50%{opacity:.5}}
+@media(prefers-reduced-motion:reduce){.reply-thinking{animation:none}}
