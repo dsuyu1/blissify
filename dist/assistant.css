@@ -152,7 +152,7 @@
 .ai-mascot-avatar.ai-mascot-welcome{position:relative;overflow:hidden;isolation:isolate;background:transparent;border-radius:50%}
 .ai-mascot-avatar.ai-mascot-welcome::before{content:"";position:absolute;inset:0;border-radius:50%;background:#e8e5f1;z-index:-1}
 [data-theme=dark] .ai-mascot-avatar.ai-mascot-welcome::before{background:#39374b}
-.ai-mascot-avatar.ai-mascot-welcome img{object-fit:cover;transform:scale(1.85);transform-origin:50% 10%;animation:mascot-welcome-rise 1s cubic-bezier(.22,1,.36,1) both}
+.ai-mascot-avatar.ai-mascot-welcome img{object-fit:cover;transform:scale(1.85);transform-origin:50% 10%;animation:none}
 @keyframes mascot-welcome-rise{from{transform:translateY(100%) scale(1.85)}to{transform:translateY(0) scale(1.85)}}
 .workspace-disclosure>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;font-weight:600;list-style:none}
 .workspace-disclosure>summary::before{content:'›';font-size:22px;transition:transform .2s}
@@ -162,3 +162,14 @@
 .assistant-workspace-grid #chat-sources{min-width:0}
 .assistant-workspace-grid .assistant-document{padding:14px 0}
 @media(prefers-reduced-motion:reduce){.ai-mascot-avatar.ai-mascot-welcome img{animation:none}.workspace-disclosure>summary::before{transition:none}}
+
+.ai-mascot-avatar.ai-mascot-welcome.mascot-enter img{animation:mascot-welcome-rise 1s cubic-bezier(.22,1,.36,1) both}
+.assistant-workspace-grid{grid-template-columns:minmax(0,1fr) 300px!important;align-items:start}
+.workspace-file-panel{position:sticky;top:16px;padding:20px!important;background:var(--ai-side)!important;border:1px solid var(--ai-line);border-radius:12px}
+.workspace-file-panel h2{margin:0 0 8px}
+.workspace-file{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;padding:16px 0;border-top:1px solid var(--ai-line);cursor:grab}
+.workspace-file:active{cursor:grabbing}.workspace-file strong{font-size:13px}.workspace-file svg{width:20px;height:20px}
+.workspace-dropzone{border:1px dashed var(--ai-line);border-radius:12px;padding:24px;min-height:160px;margin-bottom:20px}
+[data-workspace-drop].drag-over .workspace-dropzone{border-color:var(--action);background:var(--wash)}
+@media(max-width:900px){.assistant-workspace-grid{grid-template-columns:minmax(0,1fr)!important}.workspace-file-panel{position:static;order:-1}}
+@media(prefers-reduced-motion:reduce){.ai-mascot-avatar.ai-mascot-welcome.mascot-enter img{animation:none}}
