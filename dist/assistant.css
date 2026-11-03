@@ -141,3 +141,9 @@
 .m365-workspace.assistant-application .openweb-shell.sidebar-collapsed>.ai-sidebar{display:none}
 .m365-workspace.assistant-application .openweb-shell.sidebar-collapsed>.ai-main{grid-column:1;grid-row:1;width:100%;min-width:0}
 .m365-workspace.assistant-application .openweb-shell.sidebar-collapsed .ow-expand{display:inline-flex}
+.ai-mascot-avatar{display:inline-block;flex-shrink:0;width:36px;height:36px;overflow:hidden;border-radius:50%;background:#dedbea;vertical-align:middle}
+.ai-mascot-avatar img{width:100%;height:100%;max-width:none;object-fit:cover;transform:scale(1.85);transform-origin:50% 10%}
+.ai-mascot-avatar.ai-mascot-welcome{width:76px;height:76px;background:#e8e5f1}
+[data-theme=dark] .ai-mascot-avatar{background:#39374b}
+.ai-mascot-message{background:#e8e5f1!important;border-radius:50%!important;object-fit:cover}
+@media(max-width:700px){.ai-mascot-avatar.ai-mascot-welcome{width:58px;height:58px}}
