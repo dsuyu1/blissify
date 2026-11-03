@@ -52,3 +52,9 @@
 #guide-acknowledge{font:inherit;font-size:13px;min-height:44px;padding:9px 12px;border:1px solid var(--guide-line);border-radius:7px;background:var(--guide-bg);color:var(--guide-ink);margin-bottom:12px}
 #learning-guide button:disabled{opacity:.55;cursor:not-allowed}
 #guide-lesson-gate{border-top:1px solid var(--guide-line);padding-top:12px;margin-bottom:6px}
+
+#guide-reading-progress{appearance:none;border:0;border-radius:999px;overflow:hidden;background:var(--guide-line)}
+#guide-reading-progress::-webkit-progress-bar{background:var(--guide-line);border-radius:999px}
+#guide-reading-progress::-webkit-progress-value{background:#7160d8;border-radius:999px;transition:width .28s linear}
+#guide-reading-progress::-moz-progress-bar{background:#7160d8;border-radius:999px;transition:width .28s linear}
+@media(prefers-reduced-motion:reduce){#guide-reading-progress::-webkit-progress-value{transition:none}#guide-reading-progress::-moz-progress-bar{transition:none}}
