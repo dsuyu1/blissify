@@ -1,0 +1,120 @@
+/* Phone layouts. Desktop grids and typography remain unchanged. */
+.mobile-workspace-nav{display:none}
+@media screen and (max-width:760px){
+ html{scroll-padding-top:115px}
+ body{overflow-wrap:break-word}
+ img,video{max-width:100%;height:auto}
+ input,textarea,select{font-size:16px!important;max-width:100%}
+ button,a,summary{-webkit-tap-highlight-color:transparent}
+ .m365-workspace button,.m365-workspace a.primary,.m365-workspace summary{min-height:44px}
+ .m365-workspace:not(.assistant-application){padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+ .m365-workspace .suite-bar{height:auto;min-height:100px;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:4px 10px;padding:8px 14px}
+ .suite-bar>.app-launcher{grid-row:1;grid-column:1}
+ .suite-bar>strong{grid-column:2;grid-row:1;min-width:0}
+ .suite-bar>.profile-menu{grid-column:3;grid-row:1}
+ .m365-workspace .suite-bar .workspace-search{grid-column:1/-1;grid-row:2;width:100%;max-width:none;margin:0;min-height:40px}
+ .suite-bar .workspace-search button{min-height:36px;padding:0 10px}
+ .m365-workspace .workspace{padding:0 16px 24px;max-width:100%;min-width:0}
+ .m365-workspace .channel-header{padding-inline:16px;height:52px}
+ .m365-workspace .workspace-command{gap:10px;flex-wrap:wrap;padding-block:10px;height:auto;min-height:52px;font-size:13px}
+ .workspace-command>a{min-height:36px;display:flex;align-items:center}
+ .m365-workspace .role-panel{grid-template-columns:1fr;padding:14px;gap:8px}
+ .m365-workspace .role-panel p{grid-column:auto;line-height:1.5}
+ .m365-workspace .role-panel select{width:100%;min-height:44px}
+ .m365-workspace .page-head{flex-wrap:wrap;gap:12px}
+ .m365-workspace h1{font-size:26px}
+ .m365-workspace .sheet{padding:18px;min-width:0}
+ .m365-workspace .columns,.m365-workspace .role-grid{grid-template-columns:minmax(0,1fr);gap:18px}
+ .m365-workspace .summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-block:18px}
+ .m365-workspace .summary>div{padding:12px 9px}
+ .m365-workspace .summary b{font-size:22px;overflow-wrap:anywhere}
+ .m365-workspace .summary span{font-size:12px;display:block}
+ .mobile-workspace-nav{position:fixed;inset:auto 0 0;z-index:35;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--line)}
+ .mobile-workspace-nav a{min-height:52px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;font-size:12px;text-decoration:none;color:var(--ink);border-radius:6px}
+ .mobile-workspace-nav a:hover{background:var(--wash)}
+ .m365-workspace .planner-levels{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .planner-toolbar{gap:8px}
+ .m365-workspace .planner-toolbar button,.planner-toolbar>a{min-height:44px;padding:10px 12px;font-size:13px}
+ .planner-table{overflow:visible}
+ .m365-workspace .planner-table table,.planner-table tbody{display:block;width:100%}
+ .planner-table thead{display:none}
+ .m365-workspace .planner-table tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:12px}
+ .m365-workspace .planner-table td{display:block;border:0;min-width:0!important;padding:8px 4px;font-size:14px;overflow-wrap:anywhere}
+ .planner-table td:before{content:attr(data-label);display:block;font-size:11px;color:var(--muted);margin-bottom:5px;text-decoration:none;font-weight:400}
+ .planner-table td:first-child,.planner-table td:last-child{grid-column:1/-1}
+ .planner-table td:first-child{font-weight:600}
+ .planner-table td:last-child a{display:inline-flex;align-items:center;min-height:44px}
+ .m365-workspace .planner-board{grid-template-columns:1fr;overflow:visible}
+ .m365-workspace .voicemail-row>summary{gap:10px;padding:16px 10px;flex-wrap:wrap}
+ .m365-workspace .caller-copy{min-width:130px}
+ .m365-workspace .call-meta{font-size:11px}
+ .report-badge:not(:empty){flex-basis:100%;padding-left:54px;font-size:12px}
+ .voice-message{padding-inline:10px}
+ .voicemail-actions{flex-wrap:wrap;gap:10px}
+ .message-menu{max-width:100%}
+ .m365-workspace .message-menu button{display:block;width:100%;margin-block:6px;white-space:normal;text-align:left}
+ .m365-workspace .drive-list>div{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;padding:16px}
+ .drive-list span{margin-left:0;overflow-wrap:anywhere}
+ .drive-list a{min-height:44px;display:flex;align-items:center}
+ .drive-heading{flex-wrap:wrap;gap:8px}
+ .pdf-workspace{grid-template-columns:minmax(0,1fr)}
+ .pdf-tools{border:0;border-bottom:1px solid var(--line);padding:14px}
+ .pdf-toolbar,.pdf-bottom{gap:8px;padding:12px}
+ .pdf-toolbar strong{min-width:0;flex-basis:100%;overflow-wrap:anywhere}
+ .pdf-toolbar button,.pdf-tools button,.pdf-bottom button{min-height:44px!important}
+ .pdf-canvas{padding:10px;min-width:0}
+ .pdf-page{padding:18px;min-height:0;max-width:100%}
+ .pdf-field{grid-template-columns:minmax(0,1fr);gap:6px}
+ .pdf-field button{max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:left}
+ .pdf-page button.applied-redaction{min-height:36px}
+ .pdf-page header{flex-wrap:wrap;gap:10px}
+ .pdf-bottom>span{min-width:0;flex-basis:100%}
+ #report-dialog,#chat-utility,#ai-input-dialog{width:calc(100vw - 24px);max-width:calc(100vw - 24px);max-height:90dvh;padding:18px}
+ .report-content{padding:0}
+ .report-content h2{font-size:23px}
+ .actions{flex-wrap:wrap;gap:10px}
+ .actions>button{flex:1 1 150px}
+ #milestone-panel{top:12px;right:12px;left:12px;max-width:none;max-height:80dvh;overflow:auto;padding:20px}
+ #milestone-panel strong{font-size:21px}
+ #notice:not(:empty){bottom:calc(82px + env(safe-area-inset-bottom));width:max-content;max-width:calc(100vw - 24px);font-size:14px;padding:12px 16px}
+ /* Assistant owns its screen and scrolling, including when the keyboard opens. */
+ .m365-workspace.assistant-application .ai-header{padding-inline:10px;gap:6px}
+ .m365-workspace.assistant-application .ow-model{min-width:0}
+ .m365-workspace.assistant-application .ow-model>summary{font-size:16px;white-space:nowrap}
+ .m365-workspace.assistant-application .assistant-view-button{min-width:44px;min-height:44px}
+ .m365-workspace.assistant-application .assistant-view-button>span{display:none}
+ .m365-workspace.assistant-application .ai-composer{gap:8px;padding:12px;border-radius:20px}
+ .m365-workspace.assistant-application .ai-composer textarea{font-size:16px;min-height:60px;max-height:160px}
+ .m365-workspace.assistant-application .input-preview-button{font-size:12px;min-height:44px}
+ .m365-workspace.assistant-application .ai-attachment-menu>summary{min-width:40px;min-height:44px}
+ .m365-workspace.assistant-application .ai-thread{padding:18px 16px}
+ .m365-workspace.assistant-application .ai-user{max-width:95%;padding:12px 16px}
+ .m365-workspace.assistant-application .ai-message{font-size:15px;overflow-wrap:anywhere}
+ .m365-workspace.assistant-application .ai-sidebar{max-width:calc(100vw - 48px)}
+ .m365-workspace.assistant-application .assistant-workbench{padding:18px 14px calc(24px + env(safe-area-inset-bottom))}
+ .assistant-workspace-grid{grid-template-columns:minmax(0,1fr)}
+ .assistant-workspace-grid>aside{display:block}
+ .assistant-document dl>div{flex-wrap:wrap}
+ .supplier-quote{padding:20px 16px}
+ .supplier-quote table{table-layout:fixed;width:100%}
+ .supplier-quote th:last-child,.supplier-quote td:last-child{width:32%}
+ #quote-inspection[open]{display:flex;flex-direction:column;height:94dvh;max-height:94dvh;width:calc(100vw - 16px);max-width:calc(100vw - 16px)}
+ .inspection-toolbar{flex-shrink:0;padding:14px;gap:12px}
+ .inspection-toolbar h2{font-size:19px}
+ .inspection-toolbar p{font-size:13px}
+ .inspection-scroll{flex:1;min-height:0;height:auto;padding:12px;overscroll-behavior:contain}
+ .inspection-paper{padding:22px 16px;font-size:16px}
+ .inspection-paper h3{font-size:23px}
+ .inspection-paper footer{margin-top:30px;font-size:15px}
+ .inspection-reason{padding:18px}
+ #inspection-feedback{flex-shrink:0;padding:12px 14px;font-size:13px;max-height:25dvh;overflow:auto}
+ .everafter .rival-nav nav>a{min-height:44px;display:inline-flex;align-items:center}
+ .everafter .rival-nav{padding:16px;gap:14px}
+ .everafter .rival-nav nav{gap:8px 16px}
+ .everafter .hero-arch{height:280px}
+ .everafter .rival-split{padding:0 20px;gap:24px}
+ .everafter .rival-split h2,.everafter .rival-venue h2{font-size:32px}
+ .everafter .support{margin:16px;padding:22px}
+ .everafter .support button{min-height:44px}
+}
+@media screen and (max-width:380px){.m365-workspace .summary{grid-template-columns:1fr}.m365-workspace .summary>div{display:flex;align-items:baseline;gap:12px}.m365-workspace .planner-levels{grid-template-columns:1fr}.m365-workspace.assistant-application .ow-model>summary{font-size:14px}}
