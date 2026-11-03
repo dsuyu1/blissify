@@ -106,3 +106,8 @@
 @media(max-width:700px){.assistant-welcome-icon{width:54px;height:54px}}
 
 .assistant-brand>strong{white-space:nowrap;font-size:16px}
+
+/* The composer is the input surface; the textarea should blend into it. */
+.m365-workspace.assistant-application .openweb-shell .ai-composer textarea,
+[data-theme=dark] .m365-workspace.assistant-application .openweb-shell .ai-composer textarea{background:transparent;border:0;border-radius:0;box-shadow:none;resize:none;color:var(--ai-ink);outline:none}
+.m365-workspace.assistant-application .ai-composer:focus-within{border-color:var(--action)}
