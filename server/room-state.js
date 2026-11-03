@@ -16,7 +16,7 @@ export function validateRolePatch(patch,role,current){
  if('messagesReported' in patch&&patch.messagesReported!==fraudReportsComplete(patch.reports||current.reports))return 'Report all fraudulent messages with correct reasons first.';
  if(patch.attackObserved===true&&!inspectionCorrect(patch.inspectionSelection||current.inspectionSelection))return 'Select the embedded instruction in the document first.';
  if(patch.injection===true&&(!inspectionCorrect(patch.flagSelection||current.flagSelection)||(patch.flagReason||current.flagReason)!=='override'))return 'Select the instruction and explain why it is unsafe first.';
- const owners={flagSelection:'PLN-03',flagReason:'PLN-03',inspectionSelection:'PLN-03',documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
+ const owners={attackObserved:'PLN-03',flagSelection:'PLN-03',flagReason:'PLN-03',inspectionSelection:'PLN-03',documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
  const derived=['planned','reviewed','approved','privacyConfirmed','reply','chatMessages','chatAttachments'];
  for(const [key,value] of Object.entries(patch)){
   const task=tasks.find(t=>t.id===key);const owner=task?.role||owners[key];

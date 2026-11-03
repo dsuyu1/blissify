@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {tasks} from '../dist/workflow.js';import {guideTask,lessons} from '../dist/guide-content.js';
+test('every task explains the security lesson and supplies an optional hint',()=>{for(const t of tasks){assert.ok(lessons[t.id]?.why.length>40,t.id);assert.ok(lessons[t.id]?.hint.length>30,t.id);assert.doesNotMatch(lessons[t.id].hint,/GUEST-80|GARDEN-4821|TOGETHER-4821/)} });
+test('guide context follows the page, active role and explicit task selection',()=>{assert.equal(guideTask('safety',{activeRole:'DAT-02'}).id,'safetyReady');assert.equal(guideTask('review',{activeRole:'REV-04'}).id,'paymentRejected');assert.equal(guideTask('inbox',{activeRole:'VEN-01'},'verified').id,'verified');assert.equal(guideTask('handoffs',{activeRole:'PLN-03'}).id,'privacyConfirmed');assert.equal(guideTask('office',{}),null);assert.equal(guideTask('planner',{activeRole:'PLN-03',guestBrief:true}).id,'injection')});

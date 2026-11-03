@@ -15,3 +15,4 @@ test('assignments show Me only for the active role and readable names for collea
  assert.match(pageReason('documents','REV-04'),/Privacy/);
  assert.doesNotMatch(pageReason('documents','REV-04'),/DAT-02/);
 });
+test('supplier inspection and flagging form a single evidence-based milestone',()=>{assert.equal(tasks.some(t=>t.id==='attackObserved'),false);const merged=tasks.find(t=>t.id==='injection');assert.ok(merged.title.includes('Inspect and flag'));assert.deepEqual(merged.deps,[]);assert.ok(tasks.find(t=>t.id==='paymentRejected').deps.includes('injection'))});
