@@ -1,5 +1,6 @@
 // Acyclic dependencies with rotating peer reviews. Each station has an independent start.
 export const tasks=[
+ {id:'messagesReported',title:'Report the fraudulent voicemails',role:'VEN-01',level:1,page:'inbox',deps:[],note:'Identify and report all four fraudulent messages using the correct reasons.'},
  {id:'verified',title:'Verify the venue request',role:'VEN-01',level:1,page:'inbox',deps:[],note:'Use the saved vendor contact, not the incoming number.'},
  {id:'safetyReady',title:'Scope the assistant’s sources',role:'DAT-02',level:1,page:'safety',deps:[],note:'Use prepared files only; remove unnecessary sources.'},
  {id:'redacted',title:'Prepare the financial summary',role:'DAT-02',level:1,page:'documents',deps:[],note:'Apply redactions and save the prepared copy.'},
@@ -12,7 +13,7 @@ export const tasks=[
  {id:'attackObserved',title:'Inspect the assistant’s unsafe recommendation',role:'PLN-03',level:2,page:'assistant',deps:[],note:'Replay the recorded source-to-action failure; identify which document redirected the assistant.'},
  {id:'paymentRejected',title:'Reject the unverified AI payment change',role:'REV-04',level:3,page:'review',deps:['attackObserved','verified'],note:'Compare the proposed account with the saved contract and reject the change.'},
  {id:'injection',title:'Flag the supplier’s embedded instruction',role:'PLN-03',level:3,page:'assistant',deps:['attackObserved'],note:'Inspect supplier instructions while your colleagues gather evidence.'},
- {id:'planned',title:'Calculate the wedding plan',role:'PLN-03',level:3,page:'assistant',deps:['verified','redacted','guestBrief','safetyReady','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','injection','paymentRejected'],note:'Combine the completed evidence and peer checks.'},
+ {id:'planned',title:'Calculate the wedding plan',role:'PLN-03',level:3,page:'assistant',deps:['messagesReported','verified','redacted','guestBrief','safetyReady','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','injection','paymentRejected'],note:'Combine the completed evidence and peer checks.'},
  {id:'reviewed',title:'Review sources and accommodations',role:'REV-04',level:4,page:'review',deps:['planned'],note:'Review the analyst’s output independently.'},
  {id:'approved',title:'Approve the final arrangements',role:'REV-04',level:4,page:'budget',deps:['reviewed','injection','planned','verified','redacted'],note:'Use the separate finance approval card.'}
 ];

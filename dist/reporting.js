@@ -13,3 +13,5 @@ export function checkGoodMessage(message){
  if([1,2,4,7].includes(Number(message)))return {ok:true,message:'Confirmed good — this message makes a routine request. Your decision is saved.'};
  return {ok:false,message:'Not quite — this message asks you to bypass a safety check or share protected information. Review the requested action and report the concern instead. Your decision has not been saved.'};
 }
+export function fraudReportCount(reports={}){return Object.keys(expectedReasons).filter(id=>reports[id]?.disposition!=='good'&&checkReportReason(id,reports[id]?.reason).ok).length}
+export function fraudReportsComplete(reports){return fraudReportCount(reports)===Object.keys(expectedReasons).length}

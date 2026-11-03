@@ -27,3 +27,16 @@ test('good confirmations accept routine messages, reject phishing and lock the f
  assert.equal(taskBlock('mark-good',{activeRole:'VEN-01'}),'');
  assert.match(taskBlock('mark-good',{activeRole:'DAT-02'}),/permission/);
 });
+
+import {fraudReportCount,fraudReportsComplete} from '../dist/reporting.js';
+import {mergeRoom} from '../server/room-state.js';
+test('reporting milestone requires all four correct fraud reports and syncs as shared progress',()=>{
+ const reports=Object.fromEntries(Object.entries(expectedReasons).map(([id,reasons])=>[id,{reason:reasons[0]}]));
+ assert.equal(fraudReportCount(reports),4);assert.equal(fraudReportsComplete(reports),true);
+ assert.equal(fraudReportsComplete({...reports,5:{reason:'other'}}),false);
+ assert.equal(fraudReportsComplete({...reports,3:{disposition:'good'}}),false);
+ assert.ok(validateRolePatch({messagesReported:true},'VEN-01',{}));
+ assert.equal(validateRolePatch({reports,messagesReported:true},'VEN-01',{}),'');
+ const room=mergeRoom({revision:0,data:{},clocks:{}},{reports},0);
+ assert.equal(room.data.messagesReported,true);
+});
