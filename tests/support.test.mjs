@@ -16,3 +16,23 @@ test('task order respects every dependency while prerequisite labels show actual
 for(const t of tasks)for(const d of t.deps){assert.ok(tasks.findIndex(x=>x.id===d)<tasks.indexOf(t));assert.ok(dependencyDepth(d)<dependencyDepth(t.id));}
 assert.equal(prerequisiteLabel('injection'),'Independent start');assert.equal(prerequisiteLabel('planned'),'12 prerequisites');assert.equal(tasks.at(-1).id,'supportReported');
 });
+
+import {milestones,newMilestones} from '../dist/milestones.js';
+import {remainingPrerequisites,prerequisiteProgress} from '../dist/planner.js';
+test('remaining prerequisites decrease on completion and reach ready at zero',()=>{
+ const task=tasks.find(t=>t.id==='planned'),state={};assert.equal(remainingPrerequisites(task.id,state),task.deps.length);
+ task.deps.forEach((id,i)=>{state[id]=true;assert.equal(remainingPrerequisites(task.id,state),task.deps.length-i-1)});
+ assert.equal(prerequisiteProgress(task.id,state),'0 remaining');assert.equal(prerequisiteProgress('injection',{}),'Independent start');
+});
+test('valid website report persists, earns exactly one milestone, and retry adds no score',()=>{
+ const before={approved:true};const report={reason:'confidential',provider:'unverified',action:'declined'};
+ const patch={supportReported:true,supportReport:report,competitorDecision:'reported'};
+ assert.equal(validateRolePatch(patch,'VEN-01',before),'');
+ const saved=mergeRoom({revision:0,data:before,clocks:{}},patch,0);
+ const loaded=reconcileSupportProgress(JSON.parse(JSON.stringify(saved.data)));
+ assert.equal(loaded.supportReported,true);assert.ok(milestones.supportReported);
+ const score=s=>Object.keys(milestones).filter(k=>s[k]).length;
+ assert.equal(score(loaded),score(before)+1);assert.deepEqual(newMilestones(before,loaded),['supportReported']);
+ const retried=mergeRoom(saved,patch,saved.revision).data;assert.equal(score(retried),score(loaded));assert.deepEqual(newMilestones(loaded,retried),[]);
+ assert.ok(validateRolePatch({...patch,supportReport:{...report,reason:'design'}},'VEN-01',before));
+});
