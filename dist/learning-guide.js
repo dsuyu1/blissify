@@ -10,7 +10,7 @@ export function createLearningGuide(onChoose){
  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const remember=()=>{try{localStorage.setItem('blissify-guide-pinned',pinned?'1':'0')}catch{}};
  function setOpen(open){
-  if(opened===open)return;opened=open;toggle.setAttribute('aria-expanded',String(open));animation?.kill();
+  if(opened===open)return;opened=open;root.dataset.open=String(open);toggle.setAttribute('aria-expanded',String(open));animation?.kill();
   if(open){panel.hidden=false;if(window.gsap&&!reduced())animation=window.gsap.fromTo(panel,{opacity:0,y:14,scale:.88},{opacity:1,y:0,scale:1,duration:.55,ease:'back.out(1.6)',clearProps:'transform,opacity'});else{panel.style.opacity='';panel.style.transform=''}}
   else{if(window.gsap&&!reduced())animation=window.gsap.to(panel,{opacity:0,y:8,scale:.96,duration:.16,ease:'power2.in',onComplete:()=>{panel.hidden=true;panel.style.opacity='';panel.style.transform=''}});else panel.hidden=true}
  }

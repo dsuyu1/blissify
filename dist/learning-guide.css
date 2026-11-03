@@ -2,7 +2,6 @@
 [data-theme=dark] #learning-guide{--guide-bg:#252536;--guide-ink:#e4e5f2;--guide-muted:#b5b8d0;--guide-line:#4b4d63}
 #learning-guide[hidden],#learning-guide [hidden]{display:none!important}
 #guide-toggle{display:flex;align-items:center;gap:9px;padding:8px 14px 8px 8px;min-height:46px;background:var(--guide-bg);color:var(--guide-ink);border:1px solid var(--guide-line);border-radius:999px;box-shadow:0 3px 16px #0002;font-size:13px;font-weight:600;margin-left:auto}
-#guide-toggle>span:first-child{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:linear-gradient(130deg,#ffe9fe,#ff96f9);color:#29222c;font:bold 18px Georgia,serif}
 #guide-toggle:hover{border-color:#a495d7}
 #learning-guide-panel{width:360px;max-width:calc(100vw - 32px);max-height:min(560px,70dvh);overflow:auto;overscroll-behavior:contain;margin-bottom:12px;border:1px solid var(--guide-line);border-radius:14px;background:var(--guide-bg);padding:20px;box-shadow:0 12px 40px #0003;transform-origin:bottom right}
 #learning-guide-panel header{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;letter-spacing:1.2px;font-weight:700;color:var(--guide-muted);margin-bottom:12px}
@@ -38,3 +37,12 @@
 #guide-toggle>span:last-child{order:-1;padding:9px 14px;margin-bottom:12px;border:1px solid var(--guide-line);border-radius:14px 14px 3px 14px;background:var(--guide-bg);box-shadow:0 3px 14px #0002}
 #learning-guide-panel{margin-bottom:8px}
 @media(max-width:760px){#guide-toggle>.guide-mascot-frame{width:64px;height:70px;flex-basis:64px}#guide-toggle>span:last-child{display:none}#learning-guide-panel{max-height:55dvh}}
+
+/* A quiet peek at the viewport edge; reveal the speaker on interaction. */
+#learning-guide{bottom:0}
+#guide-toggle>.guide-mascot-frame{overflow:hidden;background:none;filter:drop-shadow(0 2px 5px #0003)}
+#guide-toggle .guide-mascot-frame img{transform:translateY(48%);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+#learning-guide:is(:hover,:focus-within,[data-open=true]) .guide-mascot-frame img{transform:translateY(0)}
+#guide-toggle>span:last-child{margin-bottom:16px}
+@media(max-width:760px){#learning-guide{bottom:calc(72px + env(safe-area-inset-bottom))}#learning-guide[data-app=assistant]{bottom:env(safe-area-inset-bottom)}}
+@media(prefers-reduced-motion:reduce){#guide-toggle .guide-mascot-frame img{transition:none}}
