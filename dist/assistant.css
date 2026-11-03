@@ -135,3 +135,9 @@
 
 /* The supplied PNG is embedded at cursor size without changing its artwork. */
 .inspection-paper,#quote-inspection .inspection-text{cursor:url("assets/inspection-magnifier.svg") 12 12,zoom-in}
+
+/* Collapsed mode must override every responsive two-column layout. */
+.m365-workspace.assistant-application .openweb-shell.sidebar-collapsed{grid-template-columns:minmax(0,1fr)}
+.m365-workspace.assistant-application .openweb-shell.sidebar-collapsed>.ai-sidebar{display:none}
+.m365-workspace.assistant-application .openweb-shell.sidebar-collapsed>.ai-main{grid-column:1;grid-row:1;width:100%;min-width:0}
+.m365-workspace.assistant-application .openweb-shell.sidebar-collapsed .ow-expand{display:inline-flex}
