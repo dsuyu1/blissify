@@ -250,3 +250,6 @@ a.primary{padding:10px 18px;border-radius:7px}
 [data-theme=dark] .m365-workspace .status-info:hover,[data-theme=dark] .m365-workspace .status-info[aria-expanded=true]{background:#373443}
 #waiting-tooltip{position:fixed;z-index:150;max-width:min(380px,calc(100vw - 32px));padding:14px 16px;border:1px solid #d1d1d1;border-radius:8px;background:#fff;color:#242424;box-shadow:0 5px 24px #0003;font:14px/1.6 'Segoe UI',Arial,sans-serif;white-space:pre-line;overflow-wrap:anywhere;max-height:70vh;overflow:auto}
 [data-theme=dark] #waiting-tooltip{background:#313244;color:#cdd6f4;border-color:#585b70}
+
+/* Keep the Wedding operations mark readable on either theme. */
+.wedding-team-icon img[src="assets/wedding-operations.png"]{background:#fff;border-radius:4px;padding:2px}
