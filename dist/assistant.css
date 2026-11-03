@@ -132,3 +132,6 @@
 .inspection-reason label{display:block;font-weight:600;margin-bottom:12px}
 .inspection-reason select{display:block;width:100%;padding:12px;margin-bottom:16px;background:white;color:#242424;border:1px solid #777;border-radius:4px}
 .inspection-reason button{background:#5b5fc7;color:white;border:0}
+
+/* The supplied PNG is embedded at cursor size without changing its artwork. */
+.inspection-paper,#quote-inspection .inspection-text{cursor:url("assets/inspection-magnifier.svg") 12 12,zoom-in}
