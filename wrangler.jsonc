@@ -13,19 +13,6 @@
       "/api/*"
     ]
   },
-  "vars": {
-    "GEMINI_MODEL": "gemini-3.8-flash"
-  },
-  "ratelimits": [
-    {
-      "name": "CHAT_LIMITER",
-      "namespace_id": "482101",
-      "simple": {
-        "limit": 10,
-        "period": 60
-      }
-    }
-  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 0.1

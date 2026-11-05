@@ -2,7 +2,7 @@
 
 Participants apply redactions, preview and save the prepared copy, attach it alongside the quote and anonymous requirements, then ask the assistant to plan. The assistant does the arithmetic; people check the source inputs, fees and guest requirements before human approval.
 
-Local rehearsal remains available by default. Optional live Gemini mode is enabled by the facilitator on each laptop. Live requests send minimized workshop data, the user message and bounded recent conversation to Gemini through a server endpoint; the key stays on Cloudflare. See [Gemini setup](gemini-setup.md) for secrets, configuration and limits, and [agent instructions](../server/planner-prompt.js) for the policy included on every request.
+The assistant uses built-in workshop guidance and calculates the budget in the browser. It does not call an external model.
 
 The document editor handles fictional structured fields, not real PDF files. Redaction must be applied, not merely marked. Server validation reconstructs the safe document independently of browser values. Prompt guidance supplements these controls; it does not guarantee model behavior or detect every type of sensitive free text.
 
