@@ -325,3 +325,14 @@ body button#rival-report-send,.m365-workspace button[data-action=report-message]
 .m365-workspace .supplier-quote footer :is(strong,p),[data-theme=dark] .m365-workspace .supplier-quote footer :is(strong,p){font-size:9px;line-height:1.55;color:#929292}
 .inspection-paper footer>strong,.inspection-paper footer .inspection-text{font-size:10px;line-height:1.6;color:#929292}
 .inspection-paper footer .inspection-text:hover,.inspection-paper footer .inspection-text:focus-visible{color:#333}
+
+.team-id-card dd { margin: 0 0 .55rem; overflow-wrap: anywhere; }
+.team-id-card dt { font-weight: 700; }
+@media print {
+ body.printing-team-cards #app > :not(main),
+ body.printing-team-cards main > :not(#team-card-sheet),
+ body.printing-team-cards .no-print { display: none !important; }
+ body.printing-team-cards main { width: auto; margin: 0; padding: 0; }
+ body.printing-team-cards #team-card-sheet .role-grid { display: grid; grid-template-columns: 1fr 1fr; }
+ body.printing-team-cards .team-id-card { break-inside: avoid; color: black; background: white; border: 1px solid #555; }
+}

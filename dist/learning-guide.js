@@ -3,10 +3,10 @@ import {tasks,roleName} from './workflow.js';
 import {guideTask,lessons} from './guide-content.js';
 export function createLearningGuide(onChoose){
  const root=document.createElement('aside');root.id='learning-guide';root.hidden=true;
- root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>Task guide</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><details id="guide-waiting" hidden><summary>View prerequisites</summary><ul></ul></details><h2>Why this matters</h2><p id="guide-why"></p><div id="guide-lesson-gate"><label for="guide-reading-progress">Read the AI security lesson before unlocking a hint</label><progress id="guide-reading-progress" max="10000" value="0"></progress><p id="guide-reading-status"></p><button type="button" id="guide-acknowledge" disabled>Acknowledge</button></div><button type="button" id="guide-hint-toggle" disabled aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></section><button type="button" id="guide-toggle" aria-label="Open Blissify AI task guide" aria-expanded="false" aria-controls="learning-guide-panel"><span class="guide-mascot-frame" aria-hidden="true"><img src="assets/blissify-ai-mascot.webp" alt="" width="88" height="96"></span></button>';
+ root.innerHTML='<section id="learning-guide-panel" role="region" aria-label="Task learning guide" hidden><header><span>Mr. Planner · Task guide</span><button type="button" data-guide-close aria-label="Close task guide">×</button></header><div id="guide-finale" hidden><h2>One more thing…</h2><p>I’m Mr. Planner. While you were wrapping up, I spotted another wedding site called Ever After. Check out its concierge chatbot and see what it asks you to share.</p><p id="guide-finale-owner"></p><a id="guide-finale-link" target="_blank" rel="noopener">Visit Ever After ↗</a></div><div id="guide-lesson"><label for="guide-task">Current task</label><select id="guide-task"></select><p id="guide-status"></p><details id="guide-waiting" hidden><summary>View prerequisites</summary><ul></ul></details><h2>Why this matters</h2><p id="guide-why"></p><div id="guide-lesson-gate"><label for="guide-reading-progress">Read the AI security lesson before unlocking a hint</label><progress id="guide-reading-progress" max="10000" value="0"></progress><p id="guide-reading-status"></p><button type="button" id="guide-acknowledge" disabled>Acknowledge</button></div><button type="button" id="guide-hint-toggle" disabled aria-expanded="false" aria-controls="guide-hint">Show a hint</button><p id="guide-hint" hidden></p></div></section><button type="button" id="guide-toggle" aria-label="Open Mr. Planner’s task guide" aria-expanded="false" aria-controls="learning-guide-panel"><span class="guide-mascot-frame" aria-hidden="true"><span id="guide-alert" hidden>!</span><img src="assets/blissify-ai-mascot.webp" alt="" width="88" height="96"></span></button>';
  document.body.append(root);
  const panel=root.querySelector('section'),toggle=root.querySelector('#guide-toggle'),hint=root.querySelector('#guide-hint'),hintToggle=root.querySelector('#guide-hint-toggle'),select=root.querySelector('select');
- let pinned=false,opened=false,current='',animation=null,ignoreFocus=false;const shownHints=new Set();
+ let pinned=false,opened=false,current='',animation=null,ignoreFocus=false,hasFinale=false;const shownHints=new Set();
  const gates=new Map();let gateKey='',lastTick=performance.now();
  const gateBox=root.querySelector('#guide-lesson-gate'),progressBar=root.querySelector('#guide-reading-progress'),readingStatus=root.querySelector('#guide-reading-status'),ackButton=root.querySelector('#guide-acknowledge');
  const progress=()=>gates.get(gateKey)||{elapsed:0,acknowledged:false};
@@ -22,21 +22,34 @@ export function createLearningGuide(onChoose){
   if(open){panel.hidden=false;if(window.gsap&&!reduced())animation=window.gsap.fromTo(panel,{opacity:0,y:14,scale:.88},{opacity:1,y:0,scale:1,duration:.55,ease:'back.out(1.6)',clearProps:'transform,opacity'});else{panel.style.opacity='';panel.style.transform=''}}
   else{if(window.gsap&&!reduced())animation=window.gsap.to(panel,{opacity:0,y:8,scale:.96,duration:.16,ease:'power2.in',onComplete:()=>{panel.hidden=true;panel.style.opacity='';panel.style.transform=''}});else panel.hidden=true}
  }
- toggle.addEventListener('click',()=>{pinned=!pinned;remember();setOpen(pinned)});
+ toggle.addEventListener('click',()=>{if(hasFinale){setOpen(!opened);return}pinned=!pinned;remember();setOpen(pinned)});
  root.querySelector('[data-guide-close]').addEventListener('click',()=>{pinned=false;remember();setOpen(false);ignoreFocus=true;toggle.focus();ignoreFocus=false});
- root.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')setOpen(true)});
- root.addEventListener('pointerleave',()=>{if(!pinned&&!root.contains(document.activeElement))setOpen(false)});
- toggle.addEventListener('focus',()=>{if(!ignoreFocus)setOpen(true)});
- root.addEventListener('focusout',()=>requestAnimationFrame(()=>{if(!pinned&&!root.contains(document.activeElement))setOpen(false)}));
+ root.addEventListener('pointerenter',e=>{if(!hasFinale&&e.pointerType!=='touch')setOpen(true)});
+ root.addEventListener('pointerleave',()=>{if(!hasFinale&&!pinned&&!root.contains(document.activeElement))setOpen(false)});
+ toggle.addEventListener('focus',()=>{if(!hasFinale&&!ignoreFocus)setOpen(true)});
+ root.addEventListener('focusout',()=>requestAnimationFrame(()=>{if(!hasFinale&&!pinned&&!root.contains(document.activeElement))setOpen(false)}));
  root.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();pinned=false;remember();setOpen(false);ignoreFocus=true;toggle.focus();ignoreFocus=false}});
  select.addEventListener('change',()=>onChoose(select.value));
  hintToggle.addEventListener('click',()=>{if(!progress().acknowledged)return;if(shownHints.has(current))shownHints.delete(current);else shownHints.add(current);hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'});
- return {update({page,state,preferred,portal,greeting}){
+ return {update({page,state,preferred,portal,finale}){
   if(root.parentElement!==(portal||document.body))(portal||document.body).append(root);
-  const task=guideTask(page,state,preferred);root.hidden=!state.open||!task||!!greeting;if(root.hidden)return;
+  const task=guideTask(page,state,preferred);
   root.dataset.app=page==='assistant'?'assistant':'portal';
+  const isFinale=!!finale;
+  if(isFinale!==hasFinale){setOpen(false);hasFinale=isFinale}
+  root.querySelector('#guide-alert').hidden=!isFinale;
+  root.querySelector('#guide-finale').hidden=!isFinale;
+  root.querySelector('#guide-lesson').hidden=isFinale;
+  toggle.setAttribute('aria-label',isFinale?'Mr. Planner has a new message':'Open Mr. Planner’s task guide');
+  root.hidden=!state.open||(!isFinale&&!task);
+  if(root.hidden)return;
+  if(finale){
+   root.querySelector('#guide-finale-link').href=finale.url;
+   root.querySelector('#guide-finale-owner').textContent=finale.canReport?'If the request seems suspicious, decline and report it from the chatbot. Keep Blissify open so I can record the report.':'Compare what you find with your team. Coordination can submit the report.';
+   return;
+  }
   const nextGate='blissify-lesson:'+location.search+':'+state.activeRole+':'+task.id;if(nextGate!==gateKey){gateKey=nextGate;lastTick=performance.now();if(!gates.has(gateKey)){let acknowledged=false;try{acknowledged=sessionStorage.getItem(gateKey)==='1'}catch{}gates.set(gateKey,{elapsed:acknowledged?LESSON_VIEW_MS:0,acknowledged})}}
-  const options=tasks.filter(t=>t.role===state.activeRole||t.id===task.id);
+  const options=tasks.filter(t=>!t.hidden&&(t.role===state.activeRole||t.id===task.id));
   if(current!==task.id||select.dataset.role!==state.activeRole){current=task.id;select.replaceChildren(...options.map(t=>{const option=document.createElement('option');option.value=t.id;option.textContent=t.title;return option}));select.value=task.id;select.dataset.role=state.activeRole;root.querySelector('#guide-why').textContent=lessons[task.id].why;hint.textContent=lessons[task.id].hint;hint.hidden=!shownHints.has(current);hintToggle.setAttribute('aria-expanded',String(!hint.hidden));hintToggle.textContent=hint.hidden?'Ask for a hint':'Hide hint'}
   select.value=task.id;refreshGate();
   const missing=task.deps.filter(id=>!state[id]);root.querySelector('#guide-status').textContent=roleName(task.role)+' · '+(state[task.id]?'Completed':missing.length?'Waiting on '+missing.length+' prerequisite'+(missing.length===1?'':'s'):'Ready to work on');const waiting=root.querySelector('#guide-waiting');waiting.hidden=missing.length===0;waiting.querySelector('ul').replaceChildren(...missing.map(id=>{const item=document.createElement('li');item.textContent=tasks.find(t=>t.id===id)?.title||id;return item}));

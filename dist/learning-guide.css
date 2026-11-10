@@ -63,3 +63,21 @@
 #guide-hint-toggle:hover:not(:disabled),#guide-acknowledge:hover:not(:disabled){background:#4b4fae;color:#fff;border-color:#4b4fae}
 
 #learning-guide-panel header{font-size:14px;letter-spacing:0}
+
+#guide-toggle { position: relative; }
+#guide-alert {
+ position: absolute;
+ z-index: 1;
+ right: 18px;
+ top: -9px;
+ width: 28px;
+ height: 28px;
+ border: 2px solid white;
+ border-radius: 50%;
+ background: #ab342b;
+ color: white;
+ font: 700 18px/24px system-ui, sans-serif;
+ text-align: center;
+ box-shadow: 0 2px 6px #0004;
+}
+#guide-finale a { display: inline-block; margin-top: 5px; color: inherit; text-decoration: underline; font-weight: 700; }
