@@ -14,10 +14,10 @@ export class WorkshopRoom {
  if(request.method!=='POST')return new Response('Method not allowed',{status:405});
  let text=await request.text();if(text.length>65000)return new Response('Request too large',{status:413});
  let body,next;try{body=JSON.parse(text);if(!Number.isInteger(body.revision)||body.revision<0)throw Error();const current=load();const denied=validateRolePatch(body.patch,role,current.data);if(denied)return Response.json({error:denied},{status:403});next=mergeRoom(current,body.patch,body.revision)}catch{return new Response('Invalid room update',{status:400})}
- if(!next)return Response.json(load(),{status:409,headers});
+ if(!next)return Response.json({...load(),role},{status:409,headers});
  this.ctx.storage.sql.exec('INSERT OR REPLACE INTO room (id,body) VALUES (1,?)',JSON.stringify(next));
  await this.ctx.storage.setAlarm(Date.now()+86400000);
- return Response.json(next,{headers});
+ return Response.json({...next,role},{headers});
  }
  async alarm(){this.ctx.storage.sql.exec('DELETE FROM room')}
 }
