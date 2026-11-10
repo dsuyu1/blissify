@@ -1,3 +1,4 @@
+import {stationCards} from './station-cards.js';
 export { WorkshopRoom } from './room.js';
 
 const json = (body,status=200) => Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -10,14 +11,27 @@ async function matches(a,b){
 }
 export default {async fetch(request,env){
  const path=new URL(request.url).pathname;
- if(path==='/api/room'){
-  if(!['GET','POST'].includes(request.method))return json({error:'Method not allowed'},405);
+ if(path==='/api/room'||path==='/api/station-cards'){
+  const cardsRequested=path==='/api/station-cards';
+  if(!['GET','POST'].includes(request.method)||(cardsRequested&&request.method!=='GET'))return json({error:'Method not allowed'},405);
   if(request.headers.get('X-Workshop-Client')!=='blissify'||(request.method==='POST'&&request.headers.get('Origin')!==new URL(request.url).origin))return json({error:'Use the workshop website'},403);
-  const code=request.headers.get('X-Workshop-Code')||'';
   if(!env.ROOMS||!env.WORKSHOP_ACCESS_CODE||env.WORKSHOP_ACCESS_CODE.length<12)return json({error:'Shared rooms need the WORKSHOP_ACCESS_CODE secret and room binding.'},503);
-  if(code.length>200||!await matches(code,env.WORKSHOP_ACCESS_CODE))return json({error:'Incorrect workshop code'},401);
-  const room=new URL(request.url).searchParams.get('room');if(!room||!/^[a-zA-Z0-9-]{1,40}$/.test(room))return json({error:'Invalid room'},400);
-  return env.ROOMS.getByName(room).fetch(request);
+  const room=new URL(request.url).searchParams.get('room');
+  if(!room||!/^[a-zA-Z0-9-]{1,40}$/.test(room))return json({error:'Invalid room'},400);
+  if(cardsRequested){
+   const code=request.headers.get('X-Workshop-Code')||'';
+   if(code.length>200||!await matches(code,env.WORKSHOP_ACCESS_CODE))return json({error:'Incorrect facilitator code'},401);
+   return json({cards:await stationCards(env.WORKSHOP_ACCESS_CODE,room)});
+  }
+  const card=(request.headers.get('X-Station-Card')||'').trim().toUpperCase();
+  if(!/^[A-Z]{3}-[0-9]{2}(?:-[0-9A-F]{5}){4}$/.test(card))return json({error:'Enter the sign-in code printed on your team ID card.'},401);
+  const role=card.slice(0,6);
+  const expected=(await stationCards(env.WORKSHOP_ACCESS_CODE,room))[role];
+  if(!expected||!await matches(card,expected))return json({error:'That team ID card does not match this room.'},401);
+  const headers=new Headers(request.headers);
+  headers.delete('X-Station-Card');
+  headers.set('X-Station-Role',role);
+  return env.ROOMS.getByName(room).fetch(new Request(request,{headers}));
  }
  if(path.startsWith('/api/'))return json({error:'Not found.'},404);
  return env.ASSETS.fetch(request);

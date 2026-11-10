@@ -19,8 +19,8 @@ export const lessons={
  approved:{why:'Consequential actions need human accountability. A second reviewer provides a final check that an AI-assisted plan has not changed the vendor, payment details, or client requirements.',hint:'Use the separate Finance approval card and have another person compare the final arrangements with the verified evidence.'}
 };
 export function guideTask(page,state,preferred){
- const own=tasks.filter(t=>t.role===state.activeRole);
- if(preferred){const selected=tasks.find(t=>t.id===preferred);if(selected)return selected}
+ const own=tasks.filter(t=>t.role===state.activeRole&&!t.hidden);
+ if(preferred){const selected=tasks.find(t=>t.id===preferred&&!t.hidden);if(selected)return selected}
  const local=own.filter(t=>t.page===page);
  return local.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||local.find(t=>!state[t.id])||local[0]||own.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||own.find(t=>!state[t.id])||own[0]||null;
 }
