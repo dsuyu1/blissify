@@ -68,8 +68,8 @@
 #guide-alert {
  position: absolute;
  z-index: 1;
- right: 18px;
- top: -9px;
+ right: 4px;
+ top: 2px;
  width: 28px;
  height: 28px;
  border: 2px solid white;
