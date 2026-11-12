@@ -1,5 +1,5 @@
 import {issuePhoneInvite,readPhoneInvite,isMobileAgent} from './phone-invite.js';
-import {stationCards} from './station-cards.js';
+import {stationCards,stationRole} from './station-cards.js';
 export { WorkshopRoom } from './room.js';
 
 const json = (body,status=200) => Response.json(body,{status,headers:{'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
@@ -33,11 +33,10 @@ export default {async fetch(request,env){
    if(code.length>200||!await matches(code,env.WORKSHOP_ACCESS_CODE))return json({error:'Incorrect facilitator code'},401);
    return json({cards:await stationCards(env.WORKSHOP_ACCESS_CODE,room)});
   }
-  const card=(request.headers.get('X-Station-Card')||'').trim().toUpperCase();
-  if(!/^[A-Z]{3}-[0-9]{2}(?:-[0-9A-F]{5}){4}$/.test(card))return json({error:'Enter the sign-in code printed on your team ID card.'},401);
-  const role=card.slice(0,6);
-  const expected=(await stationCards(env.WORKSHOP_ACCESS_CODE,room))[role];
-  if(!expected||!await matches(card,expected))return json({error:'That team ID card does not match this room.'},401);
+  const card=request.headers.get('X-Station-Card')||'';
+  if(!card.trim())return json({error:'Enter the station code printed on your team card.'},401);
+  const role=await stationRole(env.WORKSHOP_ACCESS_CODE,room,card,matches);
+  if(!role)return json({error:'That station code does not match this room.'},401);
   if(inviteRequested){
    if(role!=='DAT-02')return json({error:'Only the Privacy station can open this puzzle.'},403);
    return json(await issuePhoneInvite(env.WORKSHOP_ACCESS_CODE,room));

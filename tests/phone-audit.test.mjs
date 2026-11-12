@@ -32,7 +32,7 @@ test('Privacy QR opens a phone-only exercise, and a verified replay awards one s
  const station=(role)=>({'X-Workshop-Client':'blissify','X-Station-Card':cards[role]});
  const privacy=station('DAT-02'),invitePath='/api/phone-invite?room='+room,roomPath='/api/room?room='+room;
  assert.equal((await hit(invitePath,station('PLN-03'))).status,403);
- const bad={...privacy,'X-Station-Card':cards['DAT-02'].replace(/.$/,(c)=>c==='0'?'1':'0')};
+ const bad={...privacy,'X-Station-Card':cards['DAT-02']+'X'};
  assert.equal((await hit(invitePath,bad)).status,401);
  const {token}=await (await hit(invitePath,privacy)).json();
  const headers={'X-Workshop-Client':'blissify-phone','X-Phone-Invite':token,'User-Agent':'iPhone'};
