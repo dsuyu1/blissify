@@ -8,6 +8,7 @@ export function normalizeSharePointLink(value){
  }catch{return null}
 }
 
-export function expectedSharePointLink(room,configured){
- return /^test-[a-f0-9]{32}$/.test(room||'')?SAMPLE:normalizeSharePointLink(configured);
+export function acceptedSharePointLinks(room,configured){
+ const labLink=normalizeSharePointLink(configured);
+ return [labLink,/^test-[a-f0-9]{32}$/.test(room||'')?SAMPLE:null].filter(Boolean);
 }
