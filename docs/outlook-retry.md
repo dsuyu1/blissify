@@ -1,8 +1,27 @@
 # Stop the email that keeps coming back
 
-Use a dedicated fictional workshop mailbox. Seed it using the PowerShell script below or send the messages by hand. The only required message is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only. The QR in the puzzle opens Outlook on the web and does not carry credentials.
+Use a dedicated fictional workshop mailbox. Seed it with the Linux or PowerShell script below, or send the messages by hand. The only required message is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only. The QR in the puzzle opens Outlook on the web and does not carry credentials.
 
 In a shared room, Coordination opens the task from Planner. Admin rehearsal includes a sample receipt so you can run the puzzle without Outlook. None of the actions in the game send email. There is no new dependency on the existing wedding puzzles.
+
+## Seed from Linux
+
+Download [seed-blissify-inbox.py](../scripts/seed-blissify-inbox.py). It runs on Python 3 without additional packages.
+
+```bash
+python3 seed-blissify-inbox.py --to team01@yourlab.onmicrosoft.com
+```
+
+To send, use a single-tenant Entra app registration in the workshop tenant. In **Authentication**, enable **Allow public client flows**. In **API permissions**, add Microsoft Graph **delegated** permissions **User.Read** and **Mail.Send**. Consent may require an administrator depending on tenant policy. No client secret is needed. Copy the application (client) and directory (tenant) IDs from Overview.
+
+```bash
+python3 seed-blissify-inbox.py --send \
+  --tenant-id '<directory-tenant-id>' --client-id '<application-client-id>' \
+  --from vowpilot@yourlab.onmicrosoft.com \
+  --to team01@yourlab.onmicrosoft.com team02@yourlab.onmicrosoft.com
+```
+
+Replace the sample addresses and IDs, then follow the Microsoft sign-in instructions printed in the terminal. The script verifies the signed-in account and submits each message separately. Rerunning sends duplicates.
 
 ## Seed with Microsoft Graph PowerShell
 
