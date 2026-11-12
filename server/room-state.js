@@ -1,10 +1,11 @@
+import {checkRetryEvidence} from '../dist/outlook-retry.js';
 import {validSupportReport} from '../dist/support-review.js';
 import {validContractSignature} from '../dist/contract.js';
 import {reviewKeys,reviewOwners,checkPeerReview} from '../dist/peer-review.js';
 import {inspectionCorrect} from '../dist/ai-security.js';
 import {reportIsFinal,checkGoodMessage,fraudReportsComplete} from '../dist/reporting.js';
 import {tasks} from '../dist/workflow.js';
-export const sharedKeys=['supportReported','supportReport','contractCoSign','guestReview','venueReview','privacyReview','sourcesReview','flagSelection','flagReason','inspectionSelection','messagesReported','attackObserved','paymentRejected','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','guestBrief','plannedBy','chatMessages','chatAttachments','documentEdits','reports','declinedDocuments','verified','redacted','injection','planned','reviewed','approved','incidents','reply','competitorDecision','safetyReady','aiSettings'];
+export const sharedKeys=['outlookRetry','outlookRetryEvidence','supportReported','supportReport','contractCoSign','guestReview','venueReview','privacyReview','sourcesReview','flagSelection','flagReason','inspectionSelection','messagesReported','attackObserved','paymentRejected','financeReady','guestConfirmed','venueConfirmed','privacyConfirmed','sourcesConfirmed','guestBrief','plannedBy','chatMessages','chatAttachments','documentEdits','reports','declinedDocuments','verified','redacted','injection','planned','reviewed','approved','incidents','reply','competitorDecision','safetyReady','aiSettings'];
 export function mergeRoom(current,patch,baseRevision){
  if(!patch||typeof patch!=='object'||Array.isArray(patch))throw Error('Invalid patch');
  const keys=Object.keys(patch);if(keys.some(k=>!sharedKeys.includes(k)))throw Error('Unknown field');
@@ -15,6 +16,10 @@ export function mergeRoom(current,patch,baseRevision){
 
 export function validateRolePatch(patch,role,current){
  if(!['VEN-01','DAT-02','PLN-03','REV-04'].includes(role))return 'Select a station role before updating tasks.';
+ if('outlookRetry' in patch||'outlookRetryEvidence' in patch){
+  if(role!=='VEN-01')return 'Coordination completes the Outlook retry puzzle.';
+  if(patch.outlookRetry!==true||!checkRetryEvidence(patch.outlookRetryEvidence))return 'Verify the VowPilot retry stops and vendor reminders still run.';
+ }
  if('reports' in patch){if(!patch.reports||typeof patch.reports!=='object'||Array.isArray(patch.reports))return 'Invalid reports.';for(const [id,report] of Object.entries(patch.reports)){if(report?.disposition==='good'&&!checkGoodMessage(id).ok)return 'This message cannot be confirmed good.';}for(const [id,report] of Object.entries(current.reports||{})){if(reportIsFinal(report,id)&&JSON.stringify(patch.reports[id])!==JSON.stringify(report))return 'Submitted reports cannot be changed.';}}
  if('messagesReported' in patch&&patch.messagesReported!==fraudReportsComplete(patch.reports||current.reports))return 'Report all fraudulent messages with correct reasons first.';
  if(patch.attackObserved===true&&!inspectionCorrect(patch.inspectionSelection||current.inspectionSelection))return 'Select the embedded instruction in the document first.';
