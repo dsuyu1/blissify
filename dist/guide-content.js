@@ -1,5 +1,6 @@
 import {tasks} from './workflow.js';
 export const lessons={
+ sharepointCleanup:{why:'Preventing the AI from creating new links does not remove a link it already made. Inspect existing access and identify the exact link that needs cleanup.',hint:'Open Manage access for the internal guest brief. In Links, copy the broad sharing link itself, not the document address from the browser.'},
  outlookPhishing:{why:'An AI recap may misstate an approval. Check who authorized the action, who receives the information, and which files are needed before sending.',hint:'Search Outlook for the meeting-notes trial and read the recap. In Blissify, report the request and rebuild the draft for the saved venue contact with only the approved update.'},
  outlookRetry:{why:'Canceling a draft does not change the agent rule that produced it. Contain the source of the unauthorized action, then verify that normal work still runs.',hint:'Search Outlook for a VowPilot delivery failure. Open its job, cancel the queued email, and advance the simulation to see what creates a new one.'},
  phoneAudit:{why:'An assistant that only needs to draft from an approved folder should not be able to send messages or make files public. A narrow grant limits what happens if the assistant follows an unexpected instruction.',hint:'Look for the activity that gave someone access to a file. Then leave only the folder access needed to create a draft and replay.'},
@@ -22,8 +23,8 @@ export const lessons={
  approved:{why:'Consequential actions need human accountability. A second reviewer provides a final check that an AI-assisted plan has not changed the vendor, payment details, or client requirements.',hint:'Use the separate Finance approval card and have another person compare the final arrangements with the verified evidence.'}
 };
 export function guideTask(page,state,preferred){
- const own=tasks.filter(t=>t.role===state.activeRole&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop));
- if(preferred){const selected=tasks.find(t=>t.id===preferred&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop));if(selected)return selected}
+ const own=tasks.filter(t=>t.role===state.activeRole&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop)&&(!t.requires||state[t.requires]));
+ if(preferred){const selected=tasks.find(t=>t.id===preferred&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop)&&(!t.requires||state[t.requires]));if(selected)return selected}
  const local=own.filter(t=>t.page===page);
  return local.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||local.find(t=>!state[t.id])||local[0]||own.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||own.find(t=>!state[t.id])||own[0]||null;
 }

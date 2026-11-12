@@ -37,7 +37,8 @@ export default {async fetch(request,env){
   if(!room)return json({error:'This QR invitation is missing or expired. Generate a fresh one from the Privacy station.'},401);
   return env.ROOMS.getByName(room).fetch(request);
  }
- if(path==='/api/room'||path==='/api/station-cards'||path==='/api/phone-invite'){
+ if(path==='/api/room'||path==='/api/station-cards'||path==='/api/phone-invite'||path==='/api/sharepoint-proof'){
+  if(path==='/api/sharepoint-proof'&&request.method!=='POST')return json({error:'Method not allowed'},405);
   const cardsRequested=path==='/api/station-cards',inviteRequested=path==='/api/phone-invite';
   if(!['GET','POST'].includes(request.method)||((cardsRequested||inviteRequested)&&request.method!=='GET'))return json({error:'Method not allowed'},405);
   if(request.headers.get('X-Workshop-Client')!=='blissify'||(request.method==='POST'&&request.headers.get('Origin')!==new URL(request.url).origin))return json({error:'Use the workshop website'},403);
