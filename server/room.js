@@ -1,4 +1,4 @@
-import {expectedSharePointLink,normalizeSharePointLink} from './sharepoint-proof.js';
+import {acceptedSharePointLinks,normalizeSharePointLink} from './sharepoint-proof.js';
 import {reconcileSupportProgress} from '../dist/support-review.js';
 import {reconcileContractProgress} from '../dist/contract.js';
 import {reconcilePeerProgress} from '../dist/peer-review.js';
@@ -12,20 +12,20 @@ export class WorkshopRoom {
  const headers={'Cache-Control':'no-store'};
  const role=request.headers.get('X-Station-Role');
  const url=new URL(request.url);
- const expected=expectedSharePointLink(url.searchParams.get('room'),this.env.SHAREPOINT_LAB_LINK);
- const responseRoom=room=>({...room,data:{...room.data,sharepointReady:!!expected},role});
+ const accepted=acceptedSharePointLinks(url.searchParams.get('room'),this.env.SHAREPOINT_LAB_LINK);
+ const responseRoom=room=>({...room,data:{...room.data,sharepointReady:accepted.length>0},role});
  const load=()=>{const room=JSON.parse(this.ctx.storage.sql.exec('SELECT body FROM room WHERE id=1').toArray()[0]?.body||'{"revision":0,"data":{},"clocks":{}}');room.data=reconcileContractProgress(reconcilePeerProgress(reconcileSecurityProgress(room.data)));room.data=reconcileSupportProgress(room.data);room.data.messagesReported=fraudReportsComplete(room.data.reports);return room;};
  if(url.pathname==='/api/sharepoint-proof'){
   if(request.method!=='POST')return Response.json({error:'Method not allowed.'},{status:405,headers});
   if(role!=='DAT-02')return Response.json({error:'Privacy completes the SharePoint puzzle.'},{status:403,headers});
-  if(!expected)return Response.json({error:'The facilitator has not configured a SharePoint lab link yet.'},{status:503,headers});
+  if(!accepted.length)return Response.json({error:'The facilitator has not configured a SharePoint lab link yet.'},{status:503,headers});
   let submitted;
   try{
    const raw=await request.text();
    if(raw.length>8192)throw Error();
    submitted=normalizeSharePointLink(JSON.parse(raw)?.link);
   }catch{return Response.json({error:'Invalid link submission.'},{status:400,headers})}
-  if(!submitted||submitted!==expected)return Response.json({error:'That is not the lab sharing link. Copy it from Manage access → Links, rather than the browser address bar.'},{status:422,headers});
+  if(!accepted.includes(submitted))return Response.json({error:'That is not the lab sharing link. Copy it from Manage access → Links, rather than the browser address bar.'},{status:422,headers});
   const current=load();
   if(!current.data.sharepointCleanup){
    const revision=current.revision+1;
