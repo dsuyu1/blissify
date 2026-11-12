@@ -1,5 +1,6 @@
 import {tasks} from './workflow.js';
 export const lessons={
+ phoneAudit:{why:'An assistant that only needs to draft from an approved folder should not be able to send messages or make files public. A narrow grant limits what happens if the assistant follows an unexpected instruction.',hint:'Look for the activity that gave someone access to a file. Then leave only the folder access needed to create a draft and replay.'},
  supportReported:{why:'A polished support site can be an exfiltration trap. Requests to restore AI access do not justify sending original client records to an unverified provider.',hint:'Inspect partner support, identify the unnecessary original financial records, and confirm the provider through the saved directory. Coordination records this final report after approval.'},
  messagesReported:{why:'AI can imitate a familiar voice. Judge the request, pause risky actions, and report through the normal security channel so the team can respond.',hint:'Listen for changed bank details, verification-code requests, demands for original records, or pressure to skip a procedure. Routine requests can be confirmed good.'},
  verified:{why:'A convincing voice or AI-written message does not authorize a payment change. Independent verification prevents impersonation from becoming a financial action.',hint:'Use the saved contact in your printed vendor directory, rather than the number supplied in the incoming message.'},
@@ -19,8 +20,8 @@ export const lessons={
  approved:{why:'Consequential actions need human accountability. A second reviewer provides a final check that an AI-assisted plan has not changed the vendor, payment details, or client requirements.',hint:'Use the separate Finance approval card and have another person compare the final arrangements with the verified evidence.'}
 };
 export function guideTask(page,state,preferred){
- const own=tasks.filter(t=>t.role===state.activeRole&&!t.hidden);
- if(preferred){const selected=tasks.find(t=>t.id===preferred&&!t.hidden);if(selected)return selected}
+ const own=tasks.filter(t=>t.role===state.activeRole&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop));
+ if(preferred){const selected=tasks.find(t=>t.id===preferred&&!t.hidden&&(!t.sharedOnly||state.sharedWorkshop));if(selected)return selected}
  const local=own.filter(t=>t.page===page);
  return local.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||local.find(t=>!state[t.id])||local[0]||own.find(t=>!state[t.id]&&t.deps.every(id=>state[id]))||own.find(t=>!state[t.id])||own[0]||null;
 }

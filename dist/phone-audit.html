@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'; base-uri 'none'">
+<title>VowPilot · Workshop simulation</title>
+<link rel="stylesheet" href="phone-audit.css">
+<script type="module" src="phone-audit.js"></script>
+</head>
+<body>
+<main>
+<header><span aria-hidden="true">V</span><strong>VowPilot</strong><small>Workshop simulation</small></header>
+<h1>Review AI access</h1>
+<p id="audit-status" role="status">Checking your workshop invitation…</p>
+<form id="audit-form" hidden>
+<section class="assignment"><strong>Approved assignment</strong><p id="assignment"></p></section>
+<fieldset><legend>1. Which activity crossed the line?</legend><div id="audit-events"></div></fieldset>
+<fieldset><legend>2. Set the permissions for a new run</legend>
+<label><input type="radio" name="scope" value="none" required> No file access</label>
+<label><input type="radio" name="scope" value="prepared" required> Prepared wedding folder</label>
+<label><input type="radio" name="scope" value="all" required checked> All wedding workspace files</label>
+<label><input type="checkbox" name="send" checked> Send emails</label>
+<label><input type="checkbox" name="share" checked> Create public links</label>
+</fieldset>
+<p>Replay uses fictional files and does not send or share anything.</p>
+<p id="audit-feedback" role="status"></p>
+<button type="submit">Replay and verify</button>
+</form>
+<section id="audit-complete" class="assignment" hidden tabindex="-1"><h2>Access verified</h2><p>The assistant could draft from the prepared folder. It could not send email or create a public link.</p><p>Your team’s Planner has been updated. You can close this tab.</p></section>
+<noscript>Enable JavaScript and scan the QR code again.</noscript>
+</main>
+</body>
+</html>

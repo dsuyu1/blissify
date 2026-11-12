@@ -3,6 +3,7 @@ export const roleName=id=>roleNames[id]||'Unassigned';
 export const assignmentLabel=(id,currentRole)=>id&&id===currentRole?'Me':roleName(id);
 // Acyclic dependencies with rotating peer reviews. Each station has an independent start.
 export const tasks=[
+ {id:'phoneAudit',title:'Audit VowPilot’s permissions',role:'DAT-02',level:1,page:'phone-audit',deps:[],sharedOnly:true,note:'Scan the QR code, inspect the AI activity, and replay with just the permissions it needs.'},
  {id:'messagesReported',title:'Report the fraudulent voicemails',role:'VEN-01',level:1,page:'inbox',deps:[],note:'Identify and report all four fraudulent messages using the correct reasons.'},
  {id:'verified',title:'Verify the venue request',role:'VEN-01',level:1,page:'inbox',deps:[],note:'Use the saved vendor contact, not the incoming number.'},
  {id:'safetyReady',title:'Scope the assistant’s sources',role:'DAT-02',level:1,page:'safety',deps:[],note:'Use prepared files only; remove unnecessary sources.'},
@@ -20,12 +21,12 @@ export const tasks=[
  {id:'supportReported',title:'Report the fraudulent support chatbot',role:'VEN-01',level:5,page:'inbox',hidden:true,deps:['approved'],note:'Inspect the support request, decline the disclosure and report the unauthorized provider.'},
  {id:'approved',title:'Approve the final arrangements',role:'REV-04',level:4,page:'budget',deps:['reviewed','injection','planned','verified','redacted'],note:'Use the separate finance approval card.'}
 ];
-export const visibleTasks=state=>tasks.filter(task=>!task.hidden||state[task.id]);
+export const visibleTasks=(state,sharedWorkshop=false)=>tasks.filter(task=>(!task.sharedOnly||sharedWorkshop)&&(!task.hidden||state[task.id]));
 // Sort by dependency depth, then prerequisite count. Counts describe dependencies, not difficulty.
 export const dependencyDepth=(id,seen=new Set())=>{const t=tasks.find(t=>t.id===id);if(!t||seen.has(id))return 0;return t.deps.length?1+Math.max(...t.deps.map(d=>dependencyDepth(d,new Set([...seen,id])))):0};
 tasks.sort((a,b)=>dependencyDepth(a.id)-dependencyDepth(b.id)||a.deps.length-b.deps.length);
 export const prerequisiteLabel=id=>{const n=tasks.find(t=>t.id===id)?.deps.length||0;return n===0?'Independent start':n+' prerequisite'+(n===1?'':'s')};
-export const pageRoles={'venue-contract':['REV-04'],'source-settings-review':['REV-04'],inbox:['VEN-01'],documents:['DAT-02'],safety:['DAT-02'],assistant:['PLN-03'],review:['REV-04'],budget:['REV-04']};
+export const pageRoles={'phone-audit':['DAT-02'],'venue-contract':['REV-04'],'source-settings-review':['REV-04'],inbox:['VEN-01'],documents:['DAT-02'],safety:['DAT-02'],assistant:['PLN-03'],review:['REV-04'],budget:['REV-04']};
 export function pageReason(page,role){return pageRoles[page]&&!pageRoles[page].includes(role)?`You do not have permission to access this app. Assigned to ${pageRoles[page].map(roleName).join(', ')}.`:''}
 export function taskReason(id,s){const t=tasks.find(t=>t.id===id);if(!t)return '';if(t.role!==s.activeRole)return `You do not have permission to access this task. Assigned to ${roleName(t.role)}.`;const missing=t.deps.filter(k=>!s[k]);return missing.length?'Waiting for: '+missing.map(k=>tasks.find(t=>t.id===k)?.title||k).join('; '):''}
-export const actionTasks={'open-contract':'financeReady','clear-signature':'financeReady','sign-contract':'financeReady','flag-reason':'injection','inspect-text':'injection','run-attack':'injection','reject-payment':'paymentRejected','accept-payment':'paymentRejected',verify:'verified',unsafe:'verified','save-safety':'safetyReady','redact-tool':'redacted','mark-redaction':'redacted','undo-mark':'redacted','apply-redactions':'redacted','new-document':'redacted','share-document':'redacted','download-document':'redacted','preview-document':'redacted','decline-documents':'redacted','guest-brief':'guestBrief',injection:'injection',ask:'planned',review:'reviewed',approve:'approved'};
+export const actionTasks={'phone-invite':'phoneAudit','open-contract':'financeReady','clear-signature':'financeReady','sign-contract':'financeReady','flag-reason':'injection','inspect-text':'injection','run-attack':'injection','reject-payment':'paymentRejected','accept-payment':'paymentRejected',verify:'verified',unsafe:'verified','save-safety':'safetyReady','redact-tool':'redacted','mark-redaction':'redacted','undo-mark':'redacted','apply-redactions':'redacted','new-document':'redacted','share-document':'redacted','download-document':'redacted','preview-document':'redacted','decline-documents':'redacted','guest-brief':'guestBrief',injection:'injection',ask:'planned',review:'reviewed',approve:'approved'};

@@ -1,0 +1,21 @@
+:root{font:16px/1.5 system-ui,sans-serif;background:#f3f5ef;color:#202d27;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0}
+main{max-width:40rem;margin:auto;padding:clamp(1rem,4vw,2rem)}
+header{display:flex;align-items:center;gap:.65rem;border-bottom:1px solid #cbd7cd;padding-bottom:1rem}
+header span{display:grid;place-items:center;width:2rem;height:2rem;background:#294c3d;color:white;border-radius:.6rem;font-weight:750}
+header small{margin-left:auto;color:#485e52}
+h1{font-size:clamp(1.7rem,7vw,2.5rem);line-height:1.15;margin:1.35rem 0 1rem}
+h2,p{margin:.4rem 0 .65rem}
+.assignment{background:#e0ebe3;padding:1rem;border-radius:1rem;margin-bottom:1.35rem}
+fieldset{min-width:0;border:0;margin:0 0 1.4rem;padding:0}
+legend{font-weight:750;margin-bottom:.55rem}
+label{display:flex;align-items:center;gap:.65rem;min-height:3rem;border:1px solid #c5d2c9;border-radius:.65rem;background:white;padding:.6rem .75rem;margin-bottom:.45rem;cursor:pointer}
+label:has(:checked){border-color:#38674f;background:#e9f3eb}
+label small{display:block;color:#43564b}
+input{flex:0 0 auto;accent-color:#294c3d;width:1.1rem;height:1.1rem;margin:0}
+button{font:inherit;font-weight:700;display:block;width:100%;min-height:3rem;padding:.65rem;border:0;border-radius:.7rem;background:#294c3d;color:white;cursor:pointer}
+button:disabled{opacity:.65}
+:focus-visible{outline:3px solid #85641f;outline-offset:3px}
+#audit-feedback:not(:empty){border-left:3px solid #946729;background:#fcf2df;padding:.65rem}

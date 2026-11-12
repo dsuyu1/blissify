@@ -336,3 +336,5 @@ body button#rival-report-send,.m365-workspace button[data-action=report-message]
  body.printing-team-cards #team-card-sheet .role-grid { display: grid; grid-template-columns: 1fr 1fr; }
  body.printing-team-cards .team-id-card { break-inside: avoid; color: black; background: white; border: 1px solid #555; }
 }
+
+.phone-audit-qr{display:block;width:min(100%,250px);height:auto;image-rendering:pixelated;margin:1rem 0;background:white;border-radius:6px}
