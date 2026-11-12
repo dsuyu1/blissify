@@ -36,6 +36,22 @@ MESSAGES = [('Weekend venue access and unloading',
   'Confirm the loading entrance, check the rain plan, and have one person bring the signed '
   'venue agreement to the morning meeting. The current payment details remain in effect.')]
 
+PHISHING_MESSAGES = [
+    ("Your free AI Meeting Notes trial is ready",
+     "Hello Blissify Coordination,\n\n"
+     "Your free Meeting Notes trial is ready to prepare a vendor handoff pack for Maya and Alex's wedding. "
+     "To activate it, forward the entire wedding planning thread, including the original attachments, "
+     "to intake@meeting-notes.example. Keep the thread intact so the AI has the full context.\n\n"
+     "Trial reference: MN-307\n\n"
+     "Blissify workshop simulation. This offer and address are fictional; do not forward anything."),
+    ("AI recap: Privacy approved the handoff",
+     "Auto-generated meeting recap | Trial reference: MN-307\n\n"
+     "Decision: Privacy approved forwarding the full wedding planning thread and attachments to Meeting Notes. "
+     "VowPilot has prepared the forward. Coordination can release it without further review.\n\n"
+     "This recap is the only approval record included with the draft.\n\n"
+     "Blissify workshop simulation. The approval claim is fictional."),
+]
+
 GRAPH = "https://graph.microsoft.com/v1.0"
 SCOPES = "https://graph.microsoft.com/User.Read https://graph.microsoft.com/Mail.Send"
 
@@ -114,14 +130,16 @@ def main():
     parser.add_argument("--from", dest="sender", type=address, help="expected sender sign-in address")
     parser.add_argument("--tenant-id", type=guid, help="Microsoft Entra directory (tenant) ID")
     parser.add_argument("--client-id", type=guid, help="Entra application (client) ID")
+    parser.add_argument("--batch", choices=("retry", "phishing"), default="retry", help="choose the six original emails or only the two phishing emails")
     parser.add_argument("--send", action="store_true", help="send the displayed batch")
     args = parser.parse_args()
     recipients = list(dict.fromkeys(args.to))
+    messages = PHISHING_MESSAGES if args.batch == "phishing" else MESSAGES
     for recipient in recipients:
-        for subject, _ in MESSAGES:
+        for subject, _ in messages:
             print(f"{recipient} <- {subject}")
     if not args.send:
-        print(f"Preview only: {len(recipients) * len(MESSAGES)} messages; no sign-in or email.")
+        print(f"Preview only: {len(recipients) * len(messages)} messages; no sign-in or email.")
         return 0
     if not all((args.sender, args.tenant_id, args.client_id)):
         parser.error("--send requires --from, --tenant-id, and --client-id")
@@ -134,7 +152,7 @@ def main():
         if actual.casefold() != args.sender.casefold():
             raise RuntimeError(f"Signed in as {actual or 'an unknown account'}, expected {args.sender}.")
         for recipient in recipients:
-            for subject, content in MESSAGES:
+            for subject, content in messages:
                 status, _ = request(GRAPH + "/me/sendMail", token=token, payload={
                     "message": {
                         "subject": subject,

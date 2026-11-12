@@ -1,6 +1,6 @@
 # Stop the email that keeps coming back
 
-Use a dedicated fictional workshop mailbox. Seed it with the Linux or PowerShell script below, or send the messages by hand. The only required message is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only. The QR in the puzzle opens Outlook on the web and does not carry credentials.
+Use a dedicated fictional workshop mailbox. Seed it with the Linux or PowerShell script below, or send the messages by hand. The only required message is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only. The QR in each Outlook puzzle opens Outlook on the web and does not carry credentials. Put the workshop mailbox credentials in the physical safe and use the physical puzzle to provide its combination.
 
 In a shared room, Coordination opens the task from Planner. Admin rehearsal includes a sample receipt so you can run the puzzle without Outlook. None of the actions in the game send email. There is no new dependency on the existing wedding puzzles.
 
@@ -73,3 +73,16 @@ Confirm the loading entrance, check the rain plan, and have one person bring the
 ## Facilitator test
 
 Enter VP-204, cancel the queued email, and advance to the next retry. The AI recreates the message. Pause only the failed guest brief export retry. A correct replay blocks the retry and preserves the normal reminder, awarding one milestone.
+
+## Add the two AI trial phishing messages
+
+Use the updated Linux seeder. The phishing batch sends only the trial offer and forged recap; the original six are a separate batch.
+
+```bash
+python3 seed-blissify-inbox.py --batch phishing --to team01@yourlab.onmicrosoft.com
+python3 seed-blissify-inbox.py --batch phishing --send \
+  --tenant-id '<directory-tenant-id>' --client-id '<application-client-id>' \
+  --from vowpilot@yourlab.onmicrosoft.com --to team01@yourlab.onmicrosoft.com
+```
+
+Coordination opens **Report the AI trial phishing attempt** from Planner. The two emails share trial reference **MN-307**. Players use it to open the simulated forward, report the false approval, discard the forward, and rebuild a draft for the saved venue contact with only the approved vendor update. Admin rehearsal has sample emails. No forwarding or Outlook reporting happens from Blissify.
