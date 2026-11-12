@@ -1,3 +1,4 @@
+import {adminSession,validAdminSession,rehearsalRoom} from './admin-rehearsal.js';
 import {issuePhoneInvite,readPhoneInvite,isMobileAgent} from './phone-invite.js';
 import {stationCards,stationRole} from './station-cards.js';
 export { WorkshopRoom } from './room.js';
@@ -12,6 +13,21 @@ async function matches(a,b){
 }
 export default {async fetch(request,env){
  const path=new URL(request.url).pathname;
+ if(path==='/api/admin-rehearsal'){
+  if(request.method!=='POST')return json({error:'Method not allowed'},405);
+  if(request.headers.get('X-Workshop-Client')!=='blissify'||request.headers.get('Origin')!==new URL(request.url).origin)return json({error:'Use the workshop website'},403);
+  const secret=env.WORKSHOP_ACCESS_CODE;
+  if(!env.ROOMS||!secret||secret.length<12)return json({error:'Admin rehearsal needs the workshop access code and room binding.'},503);
+  const code=request.headers.get('X-Workshop-Code')||'';
+  let token=request.headers.get('X-Admin-Rehearsal')||'';
+  if(token){
+   if(token.length>120||!await validAdminSession(secret,token))return json({error:'Admin session expired. Sign in again.'},401);
+  }else{
+   if(!code||code.length>200||!await matches(code,secret))return json({error:'Incorrect facilitator code.'},401);
+   token=await adminSession(secret);
+  }
+  return json(await rehearsalRoom(secret,token));
+ }
  if(path==='/api/phone-audit'){
   if(!['GET','POST'].includes(request.method))return json({error:'Method not allowed'},405);
   if(request.headers.get('X-Workshop-Client')!=='blissify-phone'||(request.method==='POST'&&request.headers.get('Origin')!==new URL(request.url).origin))return json({error:'Open the puzzle from the workshop QR code.'},403);
