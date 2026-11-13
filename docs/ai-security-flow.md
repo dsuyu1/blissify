@@ -1,7 +1,7 @@
 # AI security flow
 The existing task flow now includes a controlled injection replay, an independent Finance action decision, and an input review before every submitted planning request. The replay is explicitly a recorded failure, not a claim that an external model was attacked.
 
-Analyst can investigate early: Inspect recorded example shows the malicious supplier instruction beside the compromised response. It proposes changing a $2,000 deposit to account ending 7719. Finance sees this proposal in Plan review, compares it to the trusted contract/callback and rejects it using account ending 4821. Approving the proposed change is blocked and records an unsafe action; no payments, bank connection, or account mutations exist.
+Analyst can investigate early: Inspect recorded example shows the malicious supplier instruction beside the compromised response. It proposes changing a $2,000 deposit to account ending 7719. Finance sees this proposal in Plan review, compares it to the trusted agreement/callback and rejects it using account ending 4821. Approving the proposed change is blocked and records an unsafe action; no payments, bank connection, or account mutations exist.
 
 Analyst flags the embedded supplier instruction. The pricing facts remain but the instruction is removed from the safe planning context. The analyst completes the existing evidence handoffs and attaches the summary, quote and anonymous requirements. Before sending, Review input shows the exact canonical document context, calculator results, message and bounded recent history. Changing input requires a new confirmation. Calculations run in the browser.
 
@@ -21,4 +21,4 @@ Supplier inspection and flagging are now one milestone. Select the embedded inst
 
 Peer reviews now compare the colleague’s saved record with a handoff draft containing one discrepancy. The reviewer identifies the field and corrects it. Completed reviews retain the source fingerprint and correction, use separate shared keys per role, and are invalidated if their evidence is missing or changed. Legacy checkbox-only reviews return to pending. The task guide uses consistent sans-serif typography and collapsible prerequisites.
 
-Finance now finds the physical venue contract, unlocks its digital copy with the prop reference VENUE-4821, checks deposit and account terms, and saves a drawn co-signature (or explicit accessible typed signature). This teaches human authorization and checking source records before relying on AI-generated financial recommendations.
+Finance now finds the physical venue agreement, unlocks its digital copy with the prop reference VENUE-4821, checks deposit and account terms, and saves a drawn co-signature (or explicit accessible typed signature). This teaches human authorization and checking source records before relying on AI-generated financial recommendations.

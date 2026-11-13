@@ -1,3 +1,4 @@
+import {countdownView} from './workshop-countdown.js';
 import {expectedSharePointLink,normalizeSharePointLink} from './sharepoint-proof.js';
 import {reconcileSupportProgress} from '../dist/support-review.js';
 import {reconcileContractProgress} from '../dist/contract.js';
@@ -13,7 +14,7 @@ export class WorkshopRoom {
  const role=request.headers.get('X-Station-Role');
  const url=new URL(request.url);
  const expected=expectedSharePointLink(url.searchParams.get('room'),this.env.SHAREPOINT_LAB_LINK);
- const responseRoom=room=>({...room,data:{...room.data,sharepointReady:!!expected},role});
+ const responseRoom=room=>({...room,data:{...room.data,sharepointReady:!!expected},role,timer:countdownView(room.timer)});
  const load=()=>{const room=JSON.parse(this.ctx.storage.sql.exec('SELECT body FROM room WHERE id=1').toArray()[0]?.body||'{"revision":0,"data":{},"clocks":{}}');room.data=reconcileContractProgress(reconcilePeerProgress(reconcileSecurityProgress(room.data)));room.data=reconcileSupportProgress(room.data);room.data.messagesReported=fraudReportsComplete(room.data.reports);return room;};
  if(url.pathname==='/api/sharepoint-proof'){
   if(request.method!=='POST')return Response.json({error:'Method not allowed.'},{status:405,headers});
@@ -29,7 +30,7 @@ export class WorkshopRoom {
   const current=load();
   if(!current.data.sharepointCleanup){
    const revision=current.revision+1;
-   const next={revision,data:{...current.data,sharepointCleanup:true},clocks:{...current.clocks,sharepointCleanup:revision}};
+   const next={...current,revision,data:{...current.data,sharepointCleanup:true},clocks:{...current.clocks,sharepointCleanup:revision}};
    this.ctx.storage.sql.exec('INSERT OR REPLACE INTO room (id,body) VALUES (1,?)',JSON.stringify(next));
    await this.ctx.storage.setAlarm(Date.now()+86400000);
   }
@@ -45,15 +46,26 @@ export class WorkshopRoom {
   const error=checkPhoneAudit(answer);
   if(error)return Response.json({error},{status:422,headers});
   const revision=current.revision+1;
-  const next={revision,data:{...current.data,phoneAudit:true},clocks:{...current.clocks,phoneAudit:revision}};
+  const next={...current,revision,data:{...current.data,phoneAudit:true},clocks:{...current.clocks,phoneAudit:revision}};
   this.ctx.storage.sql.exec('INSERT OR REPLACE INTO room (id,body) VALUES (1,?)',JSON.stringify(next));
   await this.ctx.storage.setAlarm(Date.now()+86400000);
   return Response.json({completed:true},{headers});
  }
- if(request.method==='GET')return Response.json(responseRoom(load()),{headers});
+ if(request.method==='GET'){
+  const current=load();
+  if(role&&!current.timer&&!current.data.supportReported&&request.headers.get('X-Workshop-Join')==='1'){
+   current.timer={startedAt:Date.now()};
+   this.ctx.storage.sql.exec('INSERT OR REPLACE INTO room (id,body) VALUES (1,?)',JSON.stringify(current));
+   await this.ctx.storage.setAlarm(Date.now()+86400000);
+  }
+  return Response.json(responseRoom(current),{headers});
+ }
  if(request.method!=='POST')return new Response('Method not allowed',{status:405});
  let text=await request.text();if(text.length>65000)return new Response('Request too large',{status:413});
- let body,next;try{body=JSON.parse(text);if(!Number.isInteger(body.revision)||body.revision<0)throw Error();const current=load();const denied=validateRolePatch(body.patch,role,current.data);if(denied)return Response.json({error:denied},{status:403});next=mergeRoom(current,body.patch,body.revision)}catch{return new Response('Invalid room update',{status:400})}
+ let body,next;try{body=JSON.parse(text);if(!Number.isInteger(body.revision)||body.revision<0)throw Error();const current=load();const denied=validateRolePatch(body.patch,role,current.data);if(denied)return Response.json({error:denied},{status:403});next=mergeRoom(current,body.patch,body.revision);if(next&&current.timer){
+  const {startedAt,finishedAt}=current.timer;
+  next.timer={startedAt,finishedAt:finishedAt??(next.data.supportReported?Date.now():undefined)};
+ }}catch{return new Response('Invalid room update',{status:400})}
  if(!next)return Response.json(responseRoom(load()),{status:409,headers});
  this.ctx.storage.sql.exec('INSERT OR REPLACE INTO room (id,body) VALUES (1,?)',JSON.stringify(next));
  await this.ctx.storage.setAlarm(Date.now()+86400000);
