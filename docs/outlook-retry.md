@@ -1,6 +1,8 @@
 # Stop the email that keeps coming back
 
-Use a dedicated fictional workshop mailbox. Seed it with the Linux or PowerShell script below, or send the messages by hand. The only required message is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only. The QR in each Outlook puzzle opens Outlook on the web and does not carry credentials. Put the workshop mailbox credentials in the physical safe and use the physical puzzle to provide its combination.
+Use a dedicated fictional workshop mailbox. Seed it with the Linux or PowerShell script below, or send the messages by hand. The only required message for this task is the delivery receipt; the other messages give the inbox a realistic background. Use an authorized test sender, and keep the fictional recipients in the message text only.
+
+Put a printed Outlook sign-in card inside the vault with the Microsoft sign-in URL, the workshop mailbox address, and its password. The physical puzzle gives players the vault combination. Both Outlook tasks point players to the vault and use the same mailbox; Blissify does not display its sign-in link or credentials. The separate VowPilot phone audit still has its own QR code in Blissify.
 
 In a shared room, Coordination opens the task from Planner. Admin rehearsal includes a sample receipt so you can run the puzzle without Outlook. None of the actions in the game send email. There is no new dependency on the existing wedding puzzles.
 

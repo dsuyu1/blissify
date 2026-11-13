@@ -414,7 +414,7 @@ function sharePointCleanupPage(){
  return layout(`<a href="#planner">← Back to Planner</a><section class="sheet" data-guide-task="sharepointCleanup"><h1>Find the link VowPilot left open</h1><p>Stopping VowPilot from creating new links did not remove the access it already created. Identify the link that needs cleanup.</p>${body}</section>`,'sharepoint-cleanup');
 }
 function outlookAccess(){
- return `<p>Get the workshop mailbox credentials by solving the physical puzzle and opening the safe. Enter them only on Microsoft’s sign-in page.</p><p><a href="https://outlook.office.com/mail/" target="_blank" rel="noopener noreferrer">Open Outlook on the web ↗</a></p><details><summary>Scan to open Outlook on your phone</summary><img class="phone-audit-qr" src="assets/outlook-qr.svg" width="250" height="250" alt="QR code to open Outlook on the web"></details>`;
+ return `<figure class="outlook-vault-hint"><figcaption>Hint:</figcaption><img src="assets/outlook-vault-hint.jpg" width="180" height="180" alt="A lockbox with a four-digit combination dial"></figure>`;
 }
 function outlookPhishingPage(){
  let body;

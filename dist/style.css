@@ -338,5 +338,8 @@ body button#rival-report-send,.m365-workspace button[data-action=report-message]
 }
 
 .phone-audit-qr{display:block;width:min(100%,250px);height:auto;image-rendering:pixelated;margin:1rem 0;background:white;border-radius:6px}
+.outlook-vault-hint{margin:1rem 0}
+.outlook-vault-hint figcaption{font-weight:600;margin-bottom:.5rem}
+.outlook-vault-hint img{display:block;max-width:100%;height:auto;border-radius:6px}
 
 .admin-rehearsal-controls label{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}.admin-rehearsal-controls select{min-width:8rem}.profile-popover .admin-rehearsal-controls{display:grid;gap:.55rem;padding:.55rem 0;align-items:start}.profile-popover .admin-rehearsal-controls label{display:grid}
