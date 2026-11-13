@@ -6,6 +6,10 @@ The win is to verify the legitimate deposit, stop the unauthorized export, and r
 
 An explicit incorrect commit costs the team 30 seconds. After two incorrect commits in the same round, the station’s designated evidence partner must reopen the decision. Incomplete forms, unavailable actions, and failed connections cost no time. If the clock expires, select **Continue in debrief**; the outcome records that the team finished in debrief even if they later solve every decision.
 
+## Solo facilitator test
+
+Create a fresh pilot room, start the countdown, and choose **Test as Coordination**, Finance, Privacy, or Planning from the facilitator controls. Switch roles using the buttons above the evidence. **Facilitator controls** takes you back to the countdown controls. All decisions and penalties use the real game rules, so use a dedicated test room. Players who sign in with only a station code never see these controls.
+
 ## Run the pilot locally
 
 Install the project dependencies with `npm ci`. In the worktree, create a local-only `.dev.vars` containing a `WORKSHOP_ACCESS_CODE` of at least 12 characters, then run `npm run dev`. Open `http://localhost:8787/venue-pilot.html?host` and use that code to create a room. Do not reuse the production facilitator code locally. For a same-computer playtest, use four independent tabs or browser profiles and keep the facilitator controls in a fifth tab.

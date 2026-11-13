@@ -18,9 +18,9 @@ function toggleMode(){
 $('toggle-mode').addEventListener('click',toggleMode);
 if(new URL(location.href).searchParams.has('host'))toggleMode();
 
-async function api(body){
- const url='/api/venue-pilot?room='+encodeURIComponent(session.room);
- const result=await fetch(url,{headers:{'X-Workshop-Client':'blissify-venue',[session.host?'X-Workshop-Code':'X-Station-Card']:session.credential,...(body?{'Content-Type':'application/json'}:{})},...(body?{method:'POST',body:JSON.stringify(body)}:{})});
+async function api(body,identity=session){
+ const url='/api/venue-pilot?room='+encodeURIComponent(identity.room);
+ const result=await fetch(url,{headers:{'X-Workshop-Client':'blissify-venue',[identity.host?'X-Workshop-Code':'X-Station-Card']:identity.credential,...(body?{'Content-Type':'application/json'}:{})},...(body?{method:'POST',body:JSON.stringify(body)}:{})});
  return {ok:result.ok,data:await result.json()};
 }
 const labels={lobby:'Waiting for the facilitator',running:'Countdown in progress',expired:'Time expired',debrief:'Debrief · timer stopped',secured:'Venue secured'};
@@ -41,11 +41,11 @@ function update(data){
  dashboard.hidden=work.hidden=false;
  const s=data;
  dashboard.innerHTML='<div class="status-line"><div><p class="muted">'+esc(labels[s.status])+'</p><h2>'+esc(s.title)+'</h2></div><strong id="clock" aria-label="Time remaining"></strong></div>'+
- '<p class="muted">'+(session.host?'Facilitator':esc(names[s.role]))+' · Room '+esc(session.room)+' · '+s.penalties+' time '+(s.penalties===1?'penalty':'penalties')+'</p>'+
+ '<p class="muted">'+(session.host?'Facilitator':(session.facilitator?'Solo test · ':'')+esc(names[s.role]))+' · Room '+esc(session.room)+' · '+s.penalties+' time '+(s.penalties===1?'penalty':'penalties')+'</p>'+
  '<ul class="station-grid">'+Object.entries(s.team).map(([role,t])=>'<li data-done="'+t.done+'"><strong>'+esc(names[role])+'</strong><span>'+ (t.done?'Verified':t.needsReview?'Partner review needed':'Pending')+'</span></li>').join('')+'</ul>';
  drawClock();
  // Keep partially entered answers and keyboard focus while teammate status updates.
- const key=JSON.stringify([s.status,s.round,s.team[s.role],s.reviewFor,s.result,session.cards]);
+ const key=JSON.stringify([session.host,s.role,s.status,s.round,s.team[s.role],s.reviewFor,s.result,session.cards]);
  if(key===workKey)return;
  workKey=key;
  renderWork(s);
@@ -54,7 +54,7 @@ function renderWork(s){
  if(session.host){
   const playerUrl=new URL(location.pathname,location.origin);playerUrl.searchParams.set('room',session.room);
   work.innerHTML='<section class="card"><h2>Facilitator controls</h2><p>Give each player only their assigned station code. Start when all four are ready.</p><p><a href="'+esc(playerUrl.href)+'" target="_blank" rel="noopener">Open the player sign-in</a></p>'+
-   (session.cards?'<ul class="station-grid">'+Object.entries(session.cards).map(([role,code])=>'<li><strong>'+esc(names[role])+'</strong><code>'+esc(code)+'</code></li>').join('')+'</ul>':'')+
+   (session.cards?'<ul class="station-grid">'+Object.entries(session.cards).map(([role,code])=>'<li><strong>'+esc(names[role])+'</strong><code>'+esc(code)+'</code><button type="button" class="secondary" data-action="test-role" data-station="'+esc(role)+'">Test as '+esc(names[role])+'</button></li>').join('')+'</ul>':'')+
    '<p></p><div class="actions">'+(s.status==='lobby'?'<button data-action="start">Start countdown</button>':s.status==='expired'?'<button data-action="debrief">Continue in debrief</button>':s.status==='secured'?'<strong>'+(s.result==='completed-in-debrief'?'Completed in debrief':'Escaped in time')+'</strong>':'')+'<button data-action="leave" class="secondary">Leave controls</button></div></section>';
   return;
  }
@@ -71,7 +71,8 @@ function renderWork(s){
    '<form id="decision"><label>'+esc(t.field)+'<input name="reference" required maxlength="32" autocomplete="off" autocapitalize="characters"></label>'+
    '<label>Decision<select name="decision" required><option value="">Choose an action</option>'+t.choices.map(([value,label])=>'<option value="'+esc(value)+'">'+esc(label)+'</option>').join('')+'</select></label><button type="submit">Commit decision</button><p class="muted">An incorrect decision costs the team 30 seconds while the clock is running.</p></form>');
  }
- work.innerHTML=review+'<section class="card">'+body+'<button data-action="leave" class="secondary">Leave station</button></section>';
+ const switcher=session.facilitator?'<nav class="card actions" aria-label="Solo test controls">'+Object.entries(names).map(([role,name])=>'<button type="button" class="secondary" data-action="test-role" data-station="'+esc(role)+'" '+(role===s.role?'disabled':'')+'>'+esc(name)+'</button>').join('')+'<button type="button" class="secondary" data-action="test-host">Facilitator controls</button></nav>':'';
+ work.innerHTML=switcher+review+'<section class="card">'+body+(session.facilitator?'':'<button data-action="leave" class="secondary">Leave station</button>')+'</section>';
 }
 async function refresh(){
  if(!session||acting||pollBusy)return;
@@ -116,6 +117,21 @@ async function perform(payload,button){
  finally{acting=false;button.disabled=false;}
 }
 let pending=null;
+async function switchTestRole(role,button){
+ const facilitator=session.host?session:session.facilitator;
+ if(!facilitator?.cards)return;
+ if(role&&!Object.hasOwn(facilitator.cards,role))return;
+ const next=role?{host:false,room:facilitator.room,credential:facilitator.cards[role],facilitator}:facilitator;
+ acting=true;mutation+=1;button.disabled=true;
+ try{
+  const {ok,data}=await api(undefined,next);
+  if(!ok)throw Error(data.error);
+  session=next;pending=null;workKey='';pollError=false;message();update(data);
+  work.querySelector('h2')?.setAttribute('tabindex','-1');
+  work.querySelector('h2')?.focus();
+ }catch(e){message(e.message||'Could not switch stations.',true);}
+ finally{acting=false;button.disabled=false;}
+}
 work.addEventListener('submit',async event=>{
  if(event.target.id!=='decision')return;
  event.preventDefault();if(acting)return;
@@ -126,6 +142,7 @@ work.addEventListener('submit',async event=>{
 });
 work.addEventListener('click',event=>{
  const button=event.target.closest('[data-action]');if(!button||acting)return;
+ if(button.dataset.action==='test-role'||button.dataset.action==='test-host'){switchTestRole(button.dataset.station,button);return;}
  if(button.dataset.action==='leave'){pending=null;leave();return;}
  perform({action:button.dataset.action,station:button.dataset.station,round:snapshot.round},button);
 });
