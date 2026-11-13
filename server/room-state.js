@@ -32,7 +32,7 @@ export function validateRolePatch(patch,role,current){
  if(patch.attackObserved===true&&!inspectionCorrect(patch.inspectionSelection||current.inspectionSelection))return 'Select the embedded instruction in the document first.';
  if(patch.injection===true&&(!inspectionCorrect(patch.flagSelection||current.flagSelection)||(patch.flagReason||current.flagReason)!=='override'))return 'Select the instruction and explain why it is unsafe first.';
  for(const [taskId,key] of Object.entries(reviewKeys)){if(patch[taskId]===true||key in patch){const result=checkPeerReview(taskId,patch[key]||current[key],{...current,...patch});if(!result.ok)return result.message;}}
- if((patch.financeReady===true||'contractCoSign' in patch)&&!validContractSignature(patch.contractCoSign||current.contractCoSign))return 'Verify and co-sign the venue contract first.';
+ if((patch.financeReady===true||'contractCoSign' in patch)&&!validContractSignature(patch.contractCoSign||current.contractCoSign))return 'Verify and co-sign the venue agreement first.';
  if(patch.supportReported===true&&!validSupportReport(patch.supportReport||current.supportReport))return 'Identify the confidential data request and unverified provider first.';
  const owners={supportReport:'VEN-01',competitorDecision:'VEN-01',contractCoSign:'REV-04',...reviewOwners,attackObserved:'PLN-03',flagSelection:'PLN-03',flagReason:'PLN-03',inspectionSelection:'PLN-03',documentEdits:'DAT-02',aiSettings:'DAT-02',declinedDocuments:'DAT-02',chatMessages:'PLN-03',chatAttachments:'PLN-03',reply:'PLN-03',plannedBy:'PLN-03',reports:'VEN-01'};
  const derived=['planned','reviewed','approved','privacyConfirmed','reply','chatMessages','chatAttachments'];

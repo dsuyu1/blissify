@@ -20,14 +20,14 @@ Just leave the approved location in the planning office. Thanks!` },
 
 The two-thousand-dollar deposit is due today. Our accounts team has changed the receiving account, so please use the replacement account ending in seven-seven-one-nine.
 
-The earlier account on your contract is no longer the one we’re using for this payment.
+The earlier account on your agreement is no longer the one we’re using for this payment.
 
 We’re closing out reservations this afternoon, and I’d hate for an administrative delay to affect their date. Please approve the updated payment through your planning office as soon as you can.
 
 Thank you for taking care of this.` },
   4: { sender: 'Morgan · Garden House Events', subject: 'Response to your directory callback', file: '04-morgan-callback.mp3', text: `Hi, you’ve reached Morgan at Garden House Events. Thanks for checking with us.
 
-No, we haven’t changed our payment account. The approved account still ends in four-eight-two-one, exactly as it appears on your signed contract.
+No, we haven’t changed our payment account. The approved account still ends in four-eight-two-one, exactly as it appears on your signed agreement.
 
 The deposit is two thousand dollars, and it’s already included in the seven-thousand-dollar venue package. It isn’t an additional charge.
 
@@ -54,11 +54,11 @@ I understand you may have removed them for privacy, but we can’t complete this
 Please upload the unredacted version through the document request in your planning office.` },
   7: { sender: 'Elena · Business owner', subject: 'Welcome, team', file: '07-elena-welcome.mp3', text: `Hi, team. Elena here.
 
-Thanks for taking over the final preparations for Maya and Alex’s wedding. You’ll find the contracts, budget, and client requirements around the office.
+Thanks for taking over the final preparations for Maya and Alex’s wedding. You’ll find the agreements, budget, and client requirements around the office.
 
 Please work together. Whoever is using the planning assistant will need information from the people reviewing those records.
 
-Keep client information limited to what’s needed, and have a second person check payments against the approved contract.
+Keep client information limited to what’s needed, and have a second person check payments against the approved agreement.
 
 If anyone asks us to change a supplier’s bank details, verify the request through our saved contact directory first.
 
