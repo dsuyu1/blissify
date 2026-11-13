@@ -13,6 +13,30 @@ async function matches(a,b){
 }
 export default {async fetch(request,env){
  const path=new URL(request.url).pathname;
+ if(path==='/api/venue-pilot'){
+  if(!['GET','POST'].includes(request.method))return json({error:'Method not allowed'},405);
+  const url=new URL(request.url);
+  if(request.headers.get('X-Workshop-Client')!=='blissify-venue'||(request.method==='POST'&&request.headers.get('Origin')!==url.origin))return json({error:'Use the venue pilot website.'},403);
+  const room=url.searchParams.get('room');
+  if(!room||!/^[a-z0-9-]{3,24}$/.test(room))return json({error:'Enter a room ID with 3–24 letters, digits or dashes.'},400);
+  const secret=env.WORKSHOP_ACCESS_CODE;
+  if(!env.ROOMS||!secret||secret.length<12)return json({error:'The pilot needs a facilitator code and room binding.'},503);
+  const roomKey='venue:'+room;
+  const hostCode=request.headers.get('X-Workshop-Code')||'';
+  const host=!!hostCode&&hostCode.length<=200&&await matches(hostCode,secret);
+  const card=request.headers.get('X-Station-Card')||'';
+  const role=host?null:await stationRole(secret,roomKey,card,matches);
+  if(!host&&!role)return json({error:hostCode?'Incorrect facilitator code.':'That station card does not match this pilot room.'},401);
+  const headers=new Headers(request.headers);
+  for(const name of ['X-Workshop-Code','X-Station-Card','X-Venue-Host','X-Station-Role'])headers.delete(name);
+  if(host)headers.set('X-Venue-Host','1');
+  else headers.set('X-Station-Role',role);
+  const response=await env.ROOMS.getByName(roomKey).fetch(new Request(request,{headers}));
+  if(host&&response.ok&&request.method==='GET'){
+   return json({...await response.json(),cards:await stationCards(secret,roomKey)});
+  }
+  return response;
+ }
  if(path==='/api/admin-rehearsal'){
   if(request.method!=='POST')return json({error:'Method not allowed'},405);
   if(request.headers.get('X-Workshop-Client')!=='blissify'||request.headers.get('Origin')!==new URL(request.url).origin)return json({error:'Use the workshop website'},403);

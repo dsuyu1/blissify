@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Secure the venue · Blissify</title>
+<link rel="stylesheet" href="/venue-pilot.css">
+<script type="module" src="/venue-pilot.js"></script>
+</head>
+<body>
+<header><a href="/">Blissify</a><span>Team playtest</span></header>
+<main>
+<h1>Secure the venue</h1>
+<p class="intro">Someone tried to redirect Maya and Alex’s deposit and send the private guest brief. Verify the real payment, stop the export, and release the reviewed vendor packet before time runs out.</p>
+<form id="entry" class="card">
+ <label>Room ID<input name="room" required maxlength="24" pattern="[a-z0-9\-]{3,24}" placeholder="venue-01" autocomplete="off" autocapitalize="none"></label>
+ <label id="credential-label"><span>Station code</span><input name="credential" required type="password" maxlength="200" autocomplete="off"></label>
+ <div id="host-config" hidden>
+  <label>Play time<select name="minutes"><option value="12">12 minutes · first playtest</option><option value="40">40 minutes · extended session</option></select></label>
+  <label>Evidence<select name="mode"><option value="builtin">Built-in evidence</option><option value="external">Microsoft 365 evidence links</option></select></label>
+ </div>
+ <div class="actions"><button id="join" type="submit">Join station</button><button id="create" type="submit" hidden>Create room</button><button id="toggle-mode" type="button" class="secondary">Facilitator sign-in</button></div>
+</form>
+<section id="dashboard" hidden aria-label="Room status"></section>
+<p id="message" role="status" aria-live="polite"></p>
+<section id="work" hidden aria-label="Current action"></section>
+</main>
+</body>
+</html>

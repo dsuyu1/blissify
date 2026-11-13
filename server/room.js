@@ -1,3 +1,4 @@
+import {venueRoom} from './venue-room.js';
 import {expectedSharePointLink,normalizeSharePointLink} from './sharepoint-proof.js';
 import {reconcileSupportProgress} from '../dist/support-review.js';
 import {reconcileContractProgress} from '../dist/contract.js';
@@ -12,6 +13,10 @@ export class WorkshopRoom {
  const headers={'Cache-Control':'no-store'};
  const role=request.headers.get('X-Station-Role');
  const url=new URL(request.url);
+ if(url.pathname==='/api/venue-pilot'){
+  this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS venue_pilot (id INTEGER PRIMARY KEY, body TEXT)');
+  return venueRoom(request,this.ctx.storage,this.env);
+ }
  const expected=expectedSharePointLink(url.searchParams.get('room'),this.env.SHAREPOINT_LAB_LINK);
  const responseRoom=room=>({...room,data:{...room.data,sharepointReady:!!expected},role});
  const load=()=>{const room=JSON.parse(this.ctx.storage.sql.exec('SELECT body FROM room WHERE id=1').toArray()[0]?.body||'{"revision":0,"data":{},"clocks":{}}');room.data=reconcileContractProgress(reconcilePeerProgress(reconcileSecurityProgress(room.data)));room.data=reconcileSupportProgress(room.data);room.data.messagesReported=fraudReportsComplete(room.data.reports);return room;};
@@ -59,5 +64,5 @@ export class WorkshopRoom {
  await this.ctx.storage.setAlarm(Date.now()+86400000);
  return Response.json(responseRoom(next),{headers});
  }
- async alarm(){this.ctx.storage.sql.exec('DELETE FROM room')}
+ async alarm(){this.ctx.storage.sql.exec('DELETE FROM room');this.ctx.storage.sql.exec('DROP TABLE IF EXISTS venue_pilot')}
 }
